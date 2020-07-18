@@ -215,7 +215,7 @@ function Rule.PutInPlayOperation(e,tp,eg,ep,ev,re,r,rp)
 		end
 		local g=Duel.GetMatchingGroup(Card.IsType,cp,LOCATION_HAND,0,nil,TYPE_TREASURE)
 		Duel.SendtoInPlay(g,REASON_RULE)
-		local coin=Duel.GetCoin(cp)
+		local coin=g:GetSum(Card.GetCoin)
 		Duel.AddCoin(cp,coin)
 	end
 end

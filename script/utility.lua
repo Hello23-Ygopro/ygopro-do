@@ -154,12 +154,13 @@ function Auxiliary.TreasureFilter(c,coin)
 end
 function Auxiliary.TreasureTarget(e,tp,eg,ep,ev,re,r,rp,chk)
 	local f=Auxiliary.SupplyFilter(Auxiliary.TreasureFilter)
-	local coin=Duel.GetCoin(tp)
+	local g=Duel.GetMatchingGroup(Card.IsType,tp,LOCATION_HAND,0,nil,TYPE_TREASURE)
+	local coin=g:GetSum(Card.GetCoin)
 	if chk==0 then return Duel.IsExistingMatchingCard(f,tp,LOCATION_SUPPLY,LOCATION_SUPPLY,1,nil,coin) end
 end
 function Auxiliary.TreasureOperation(e,tp,eg,ep,ev,re,r,rp)
 	local f=Auxiliary.SupplyFilter(Auxiliary.TreasureFilter)
-	local coin=Duel.GetCoin(tp)
+	local coin=Duel.GetCoins(tp)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_GAIN)
 	local tc=Duel.SelectMatchingCard(tp,f,tp,LOCATION_SUPPLY,LOCATION_SUPPLY,1,1,nil,coin):GetFirst()
 	if tc then

@@ -162,11 +162,6 @@ function Duel.IsPlayerCanBuy(player)
 	if Duel.GetTurnPlayer()~=player or Duel.GetCurrentPhase()~=PHASE_BUY then return false end
 	return Duel.GetBuys(player)>0
 end
---get the total amount of coins a player has
-function Duel.GetCoin(player)
-	local g=Duel.GetMatchingGroup(aux.InPlayFilter(Card.IsType),player,LOCATION_INPLAY,0,nil,TYPE_TREASURE)
-	return g:GetSum(Card.GetCoin)
-end
 --get the total amount of victory points a player has
 function Duel.GetVP(player)
 	local g=Duel.GetMatchingGroup(Card.IsHasVP,player,LOCATION_ALL-LOCATION_SUPPLY,0,nil)
