@@ -14,11 +14,11 @@ Choose 10 Kingdom cards to use, however you like. You can pick them randomly. Wh
 5. During your [Action phase](http://wiki.dominionstrategy.com/index.php/Gameplay#Action_phase), you can play one [Action](http://wiki.dominionstrategy.com/index.php/Action#Action_cards) card from your hand. If you cannot do everything a card tells you to do, you do as much as you can; you can still play a card even if you know you will not be able to do everything it tells you to.<br>
 Some cards give "+1 Action". This increases how many Action cards you can play in a [turn](http://wiki.dominionstrategy.com/index.php/Turn).<br>
 Using up your Actions is optional; you can have an Action card left in hand that you can play, and decide not to play it.
-6. During your [Buy phase](http://wiki.dominionstrategy.com/index.php/Gameplay#Buy_phase), you can play any number of [Treasure](http://wiki.dominionstrategy.com/index.php/Treasure) cards from your hand, in any order. Then, you can buy one card, costing as much $ (coins) as you have or less. You buy a card by choosing it from the Supply, and then "gaining" it. "Gaining" a card means moving it from the Supply to your [discard pile](http://wiki.dominionstrategy.com/index.php/Discard). Your total amount of [coins](http://wiki.dominionstrategy.com/index.php/Coin) available to spend goes down by the cost of the card.<br>
+6. During your [Buy phase](http://wiki.dominionstrategy.com/index.php/Gameplay#Buy_phase), you can play any number of [Treasure](http://wiki.dominionstrategy.com/index.php/Treasure) cards from your hand, in any order. Then, you can buy one card, [costing](http://wiki.dominionstrategy.com/index.php/Cost) as much $ (coins) as you have or less. You buy a card by choosing it from the Supply, and then "[gaining](http://wiki.dominionstrategy.com/index.php/Gain)" it. "Gaining" a card means moving it from the Supply to your [discard pile](http://wiki.dominionstrategy.com/index.php/Discard). Your total amount of [coins](http://wiki.dominionstrategy.com/index.php/Coin) available to spend goes down by the cost of the card.<br>
 Some cards give "+1 Buy". This increases how many cards you can buy in a turn in your Buy phase.<br>
 You cannot go back and play more Treasures after buying a card; first play Treasures, then buy.
 7. During your [Clean-up phase](http://wiki.dominionstrategy.com/index.php/Gameplay#Clean-up_phase), take all of the cards you have in play (both Actions and Treasures), and any remaining cards in your hand, and put them all into your discard pile.<br>
-Draw a new hand of 5 cards. If your deck has fewer than 5 cards, first shuffle your discard pile and put it under your deck, then draw.<br>
+Draw a new hand of 5 cards. If your deck has fewer than 5 cards, first [shuffle](http://wiki.dominionstrategy.com/index.php/Shuffle) your discard pile and put it under your deck, then draw.<br>
 Play passes to the player to your left. Any unused +Actions, unused +Buys, or unspent coins that you had left are gone; you start each turn fresh.
 
 **Important:**
@@ -54,8 +54,8 @@ Take all of your cards - from your hand, deck, discard pile, play area, and even
 <details>
 <summary>Location</summary>
 
-- `0x4	Monster Zone` = P1 Sequence 0~4: Top half Kingdom cards (Supply) + P2 Sequence 0~2: Victory cards (Base) + Sequence 5~6: [Events](http://wiki.dominionstrategy.com/index.php/Event)
-- `0x8	Spell & Trap Zone` = P1 Sequence 0~4: Bottom half Kingdom cards (Supply) + P2 Sequence 0~2: Treasure cards (Base) + P2 Sequence 3: Curse cards (Base)
+- `0x4	Monster Zone` = P1 Sequence 0～4: Top half Kingdom cards (Supply) + P2 Sequence 0～2: Victory cards (Base) + Sequence 5～6: [Events](http://wiki.dominionstrategy.com/index.php/Event)
+- `0x8	Spell & Trap Zone` = P1 Sequence 0～4: Bottom half Kingdom cards (Supply) + P2 Sequence 0～2: Treasure cards (Base) + P2 Sequence 3: Curse cards (Base)
 - `0x10	Graveyard` = Discard pile
 - `0x20	Banished` = [Trash](http://wiki.dominionstrategy.com/index.php/Trash)
 - `0x40	Extra Deck` = ～Reserved～
@@ -76,17 +76,17 @@ Take all of your cards - from your hand, deck, discard pile, play area, and even
 
 - `0x1	Destroy Spell/Trap` = ～Reserved～
 - `0x2	Destroy Monster` = ～Reserved～
-- `0x4	Banish Card` = Trash
+- `0x4	Banish Card` = Trash a card
 - `0x8	Send to Graveyard` = ～Reserved～
-- `0x10	Return to Hand` = Add to Hand
-- `0x20	Return to Deck` = Add to Deck
-- `0x40	Destroy Hand` = Discard Hand
-- `0x80	Destroy Deck` = Discard Deck
-- `0x100	Increase Draw` = Draw Draw
+- `0x10	Return to Hand` = Add a card to a player's hand
+- `0x20	Return to Deck` = Add a card to a player's deck
+- `0x40	Destroy Hand` = Discard a card from a player's hand
+- `0x80	Destroy Deck` = Discard a card from a player's deck
+- `0x100	Increase Draw` = Draw a card from the deck
 - `0x200	Search Deck` = ～Reserved～
 - `0x400	GY to Hand/Field` = ～Reserved～
 - `0x800	Change Battle Position` = ～Reserved～
-- `0x1000	Get Control` = Gain Card
+- `0x1000	Get Control` = Gain a card
 - `0x2000	Increase/Decrease ATK/DEF` = ～Reserved～
 - `0x4000	Piercing` = ～Reserved～
 - `0x8000	Attack Multiple Times` = +Action
@@ -110,8 +110,7 @@ Take all of your cards - from your hand, deck, discard pile, play area, and even
 <details>
 <summary>Card Search</summary>
 
-You can search for the following specific card information in YGOPro. (Note: Select `All` in the `Type` tab to be able to filter Victory, Curse, and Reaction cards.)
+You can search for the following specific card information in YGOPro: (Note: Select `All` in the `Type` tab to be able to filter Victory, Curse, and Reaction cards.)
 - Card Type: Use the `Type` tab
 - Cost: Use the `Cost` tab
-- You can also search for cards whose abilities have been modified for YGOPro by typing `YGOPro`.
 </details>
