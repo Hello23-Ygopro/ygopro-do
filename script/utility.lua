@@ -161,12 +161,17 @@ end
 function Auxiliary.TreasureOperation(e,tp,eg,ep,ev,re,r,rp)
 	local f=Auxiliary.SupplyFilter(Auxiliary.TreasureFilter)
 	local coin=Duel.GetCoins(tp)
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_GAIN)
-	local tc=Duel.SelectMatchingCard(tp,f,tp,LOCATION_SUPPLY,LOCATION_SUPPLY,1,1,nil,coin):GetFirst()
-	if tc then
+	local g=Duel.GetMatchingGroup(f,tp,LOCATION_SUPPLY,LOCATION_SUPPLY,nil,coin)
+	while Duel.GetBuys(tp)>0 and g:GetCount()>0 do
+		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_GAIN)
+		local tc=g:Select(tp,0,1,nil):GetFirst()
+		if not tc then break end
 		Duel.HintSelection(Group.FromCards(tc))
 		Duel.GainCards(tc,REASON_RULE,tp)
+		Duel.RemoveBuy(tp,1)
 		Duel.RemoveCoin(tp,tc:GetCost())
+		coin=Duel.GetCoins(tp)
+		g=g:Filter(Auxiliary.SupplyFilter(Auxiliary.TreasureFilter),nil,coin)
 	end
 end
 

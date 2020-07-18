@@ -210,9 +210,6 @@ function Rule.PutInPlayOperation(e,tp,eg,ep,ev,re,r,rp)
 		end
 		Duel.SendtoInPlay(rc,REASON_RULE)
 	elseif rc:IsType(TYPE_TREASURE) then
-		if re:IsHasProperty(EFFECT_FLAG_PLAY_PARAM) then
-			Duel.RemoveBuy(cp,1)
-		end
 		local g=Duel.GetMatchingGroup(Card.IsType,cp,LOCATION_HAND,0,nil,TYPE_TREASURE)
 		Duel.SendtoInPlay(g,REASON_RULE)
 		local coin=g:GetSum(Card.GetCoin)
