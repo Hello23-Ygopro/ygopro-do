@@ -1,3 +1,78 @@
+--Overwritten Duel functions
+--reveal the top cards of a player's deck
+--Note: Overwritten to put the discard pile onto the deck
+local duel_confirm_decktop=Duel.ConfirmDecktop
+function Duel.ConfirmDecktop(player,count)
+	local deck_count=Duel.GetFieldGroupCount(player,LOCATION_DECK,0)
+	local g=Duel.GetMatchingGroup(Card.IsAbleToDeck,player,LOCATION_DPILE,0,nil)
+	if count>deck_count and g:GetCount()>0 then
+		Duel.SendtoDeck(g,player,SEQ_DECK_SHUFFLE,REASON_RULE)
+		Duel.ShuffleDeck(player)
+	end
+	if deck_count>0 and count>deck_count and g:GetCount()==0 then count=deck_count end
+	return duel_confirm_decktop(player,count)
+end
+--draw a card
+--Note: Overwritten to put the discard pile onto the deck
+local duel_draw=Duel.Draw
+function Duel.Draw(player,count,reason)
+	local deck_count=Duel.GetFieldGroupCount(player,LOCATION_DECK,0)
+	local g=Duel.GetMatchingGroup(Card.IsAbleToDeck,player,LOCATION_DPILE,0,nil)
+	if count>deck_count and g:GetCount()>0 then
+		Duel.SendtoDeck(g,player,SEQ_DECK_SHUFFLE,REASON_RULE)
+		Duel.ShuffleDeck(player)
+	end
+	if deck_count>0 and count>deck_count and g:GetCount()==0 then count=deck_count end
+	return duel_draw(player,count,reason)
+end
+--check if a player can draw a card
+--Note: Overwritten to check if a player's deck size is less than the number of cards they will draw
+local duel_is_player_can_draw=Duel.IsPlayerCanDraw
+function Duel.IsPlayerCanDraw(player,count)
+	count=count or 0
+	local deck_count=Duel.GetFieldGroupCount(player,LOCATION_DECK,0)
+	local g=Duel.GetMatchingGroup(Card.IsAbleToDeck,player,LOCATION_DPILE,0,nil)
+	if deck_count>0 and count>deck_count and g:GetCount()==0 then count=deck_count end
+	return duel_is_player_can_draw(player,count)
+end
+--discard the top cards of a player's deck
+--Note: Overwritten to put the discard pile onto the deck
+local duel_discard_deck=Duel.DiscardDeck
+function Duel.DiscardDeck(player,count,reason)
+	local res=0
+	local deck_count=Duel.GetFieldGroupCount(player,LOCATION_DECK,0)
+	local g1=Duel.GetMatchingGroup(Card.IsAbleToDeck,player,LOCATION_DPILE,0,nil)
+	if count>deck_count and g1:GetCount()>0 then
+		Duel.SendtoDeck(g1,player,SEQ_DECK_SHUFFLE,REASON_RULE)
+		Duel.ShuffleDeck(player)
+	end
+	if deck_count>0 and count>deck_count and g1:GetCount()==0 then count=deck_count end
+	--fix some cards sent to the wrong player's discard pile
+	if Duel.IsPlayerCanDiscardDeck(player,count) then
+		local g2=Duel.GetDecktopGroup(player,count)
+		Duel.DisableShuffleCheck()
+		res=res+Duel.SendtoDPile(g2,reason+REASON_DISCARD,player)
+	end
+	return res
+end
+--select a card
+--Note: Overwritten to notify a player if there are no cards to select
+local duel_select_matching_card=Duel.SelectMatchingCard
+function Duel.SelectMatchingCard(sel_player,f,player,s,o,min,max,ex,...)
+	if not Duel.IsExistingMatchingCard(f,player,s,o,1,ex,...) then
+		Duel.Hint(HINT_MESSAGE,sel_player,ERROR_NOTARGETS)
+	end
+	return duel_select_matching_card(sel_player,f,player,s,o,min,max,ex,...)
+end
+--target a card
+--Note: Overwritten to notify a player if there are no cards to select
+local duel_select_target=Duel.SelectTarget
+function Duel.SelectTarget(sel_player,f,player,s,o,min,max,ex,...)
+	if not Duel.IsExistingTarget(f,player,s,o,1,ex,...) then
+		Duel.Hint(HINT_MESSAGE,sel_player,ERROR_NOTARGETS)
+	end
+	return duel_select_target(sel_player,f,player,s,o,min,max,ex,...)
+end
 --New Duel functions
 --generate a card
 function Duel.CreateCard(player,code)
@@ -87,7 +162,7 @@ function Duel.IsPlayerCanBuy(player)
 	if Duel.GetTurnPlayer()~=player or Duel.GetCurrentPhase()~=PHASE_BUY then return false end
 	return Duel.GetBuys(player)>0
 end
---get the total amount of coins a player has in play
+--get the total amount of coins a player has
 function Duel.GetCoin(player)
 	local g=Duel.GetMatchingGroup(aux.InPlayFilter(Card.IsType),player,LOCATION_INPLAY,0,nil,TYPE_TREASURE)
 	return g:GetSum(Card.GetCoin)
@@ -193,80 +268,6 @@ end
 function Duel.GetEmptySupplyPiles()
 	local ct=Duel.GetMatchingGroupCount(aux.SupplyFilter(),0,LOCATION_SUPPLY,LOCATION_SUPPLY,nil)
 	return 17-ct
-end
---Overwritten Duel functions
---reveal the top cards of a player's deck
---Note: Overwritten to put the discard pile onto the deck
-local duel_confirm_decktop=Duel.ConfirmDecktop
-function Duel.ConfirmDecktop(player,count)
-	local deck_count=Duel.GetFieldGroupCount(player,LOCATION_DECK,0)
-	if count>deck_count then
-		local g=Duel.GetMatchingGroup(Card.IsAbleToDeck,player,LOCATION_DPILE,0,nil)
-		Duel.SendtoDeck(g,player,SEQ_DECK_SHUFFLE,REASON_RULE)
-		Duel.ShuffleDeck(player)
-	end
-	if deck_count>0 and count>deck_count then count=deck_count end
-	return duel_confirm_decktop(player,count)
-end
---draw a card
---Note: Overwritten to put the discard pile onto the deck
-local duel_draw=Duel.Draw
-function Duel.Draw(player,count,reason)
-	local deck_count=Duel.GetFieldGroupCount(player,LOCATION_DECK,0)
-	if count>deck_count then
-		local g=Duel.GetMatchingGroup(Card.IsAbleToDeck,player,LOCATION_DPILE,0,nil)
-		Duel.SendtoDeck(g,player,SEQ_DECK_SHUFFLE,REASON_RULE)
-		Duel.ShuffleDeck(player)
-	end
-	if deck_count>0 and count>deck_count then count=deck_count end
-	return duel_draw(player,count,reason)
-end
---check if a player can draw a card
---Note: Overwritten to check if a player's deck size is less than the number of cards they will draw
-local duel_is_player_can_draw=Duel.IsPlayerCanDraw
-function Duel.IsPlayerCanDraw(player,count)
-	count=count or 0
-	local deck_count=Duel.GetFieldGroupCount(player,LOCATION_DECK,0)
-	if deck_count>0 and count>deck_count then count=deck_count end
-	return duel_is_player_can_draw(player,count)
-end
---discard the top cards of a player's deck
---Note: Overwritten to put the discard pile onto the deck
-local duel_discard_deck=Duel.DiscardDeck
-function Duel.DiscardDeck(player,count,reason)
-	local res=0
-	local deck_count=Duel.GetFieldGroupCount(player,LOCATION_DECK,0)
-	if count>deck_count then
-		local g1=Duel.GetMatchingGroup(Card.IsAbleToDeck,player,LOCATION_DPILE,0,nil)
-		Duel.SendtoDeck(g1,player,SEQ_DECK_SHUFFLE,REASON_RULE)
-		Duel.ShuffleDeck(player)
-	end
-	if deck_count>0 and count>deck_count then count=deck_count end
-	--fix some cards sent to the wrong player's discard pile
-	if Duel.IsPlayerCanDiscardDeck(player,count) then
-		local g2=Duel.GetDecktopGroup(player,count)
-		Duel.DisableShuffleCheck()
-		res=res+Duel.SendtoDPile(g2,reason+REASON_DISCARD,player)
-	end
-	return res
-end
---select a card
---Note: Overwritten to notify a player if there are no cards to select
-local duel_select_matching_card=Duel.SelectMatchingCard
-function Duel.SelectMatchingCard(sel_player,f,player,s,o,min,max,ex,...)
-	if not Duel.IsExistingMatchingCard(f,player,s,o,1,ex,...) then
-		Duel.Hint(HINT_MESSAGE,sel_player,ERROR_NOTARGETS)
-	end
-	return duel_select_matching_card(sel_player,f,player,s,o,min,max,ex,...)
-end
---target a card
---Note: Overwritten to notify a player if there are no cards to select
-local duel_select_target=Duel.SelectTarget
-function Duel.SelectTarget(sel_player,f,player,s,o,min,max,ex,...)
-	if not Duel.IsExistingTarget(f,player,s,o,1,ex,...) then
-		Duel.Hint(HINT_MESSAGE,sel_player,ERROR_NOTARGETS)
-	end
-	return duel_select_target(sel_player,f,player,s,o,min,max,ex,...)
 end
 --Renamed Duel functions
 --send a card to the discard pile
