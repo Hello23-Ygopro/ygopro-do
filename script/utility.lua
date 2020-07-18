@@ -164,7 +164,7 @@ function Auxiliary.TreasureOperation(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.SelectMatchingCard(tp,f,tp,LOCATION_SUPPLY,LOCATION_SUPPLY,1,1,nil,coin):GetFirst()
 	if tc then
 		Duel.HintSelection(Group.FromCards(tc))
-		Duel.GainCards(tc,REASON_EFFECT,tp)
+		Duel.GainCards(tc,REASON_RULE,tp)
 		Duel.RemoveCoin(tp,tc:GetCost())
 	end
 end
@@ -301,10 +301,10 @@ loadutility("rule.lua")
 
 		Additional Rules
 		* When two things happen to different players at the same time, go in turn order starting with the player whose
-		turn it is. For example, when a player plays Witch, the other players gain Cursesin turn order, which may matter
+		turn it is. For example, when a player plays Witch, the other players gain Curses in turn order, which may matter
 		if the Curses run out.
 		* When two things happen to one player at the same time, that player picks the order to do them, even if some are
-		mandatory and some are not
+		mandatory and some are not.
 		* When a card gives you a choice ("choose one..."), you can pick any option, without considering whether or not
 		you will be able to do it.
 ]]

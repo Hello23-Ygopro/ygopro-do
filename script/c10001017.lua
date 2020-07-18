@@ -11,8 +11,8 @@ function scard.initial_effect(c)
 end
 --change vp
 function scard.val1(e,c)
-	local ct=Duel.CardCount(c:GetControler())
-	return math.floor(ct*1)
+	local ct=Duel.GetCardCount(c:GetControler())
+	return math.floor(ct/10)
 end
 --[[
 	FAQ

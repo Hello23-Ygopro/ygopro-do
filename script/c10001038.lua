@@ -19,7 +19,7 @@ function scard.op1(e,tp,eg,ep,ev,re,r,rp)
 	end
 	if g:GetCount()==0 then return end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DISCARD)
-	local sg2=g:FilterSelect(tp,Card.IsAbleToDPile,0,2,nil)
+	local sg2=g:FilterSelect(tp,Card.IsAbleToDPile,0,g:GetCount(),nil)
 	if sg2:GetCount()>0 then
 		Duel.SendtoDPile(sg2,REASON_EFFECT+REASON_DISCARD,tp)
 		g:Sub(sg2)

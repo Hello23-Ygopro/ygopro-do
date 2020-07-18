@@ -189,7 +189,7 @@ function Rule.add_copies()
 			if c:IsCode(CARD_COPPER) then c:AddCounter(COUNTER_COPIES,46)
 			elseif c:IsCode(CARD_SILVER) then c:AddCounter(COUNTER_COPIES,40)
 			elseif c:IsCode(CARD_GOLD) then c:AddCounter(COUNTER_COPIES,30)
-			elseif c:IsType(TYPE_CURSE) or c:IsType(TYPE_ACTION) then c:AddCounter(COUNTER_COPIES,10) end
+			elseif c:IsStatus(STATUS_KINGDOM) or c:IsType(TYPE_CURSE) then c:AddCounter(COUNTER_COPIES,10) end
 		end
 	end
 end
@@ -260,11 +260,11 @@ end
 function Rule.EndGameOperation(e,tp,eg,ep,ev,re,r,rp)
 	local g1=Duel.GetMatchingGroup(aux.TRUE,PLAYER_ONE,LOCATION_ALL-LOCATION_DECK-LOCATION_SUPPLY,0,nil)
 	local g2=Duel.GetMatchingGroup(aux.TRUE,PLAYER_TWO,LOCATION_ALL-LOCATION_DECK-LOCATION_SUPPLY,0,nil)
-	Duel.DisableShuffleCheck()
 	Duel.SendtoDeck(g1,PLAYER_ONE,SEQ_DECK_SHUFFLE,REASON_RULE)
 	Duel.SendtoDeck(g2,PLAYER_TWO,SEQ_DECK_SHUFFLE,REASON_RULE)
 	local g3=Duel.GetMatchingGroup(Card.IsHasVP,PLAYER_ONE,LOCATION_DECK,0,nil)
 	local g4=Duel.GetMatchingGroup(Card.IsHasVP,PLAYER_TWO,LOCATION_DECK,0,nil)
+	Duel.DisableShuffleCheck()
 	Duel.SendtoHand(g3,PLAYER_ONE,REASON_RULE)
 	Duel.ConfirmCards(PLAYER_TWO,g3)
 	Duel.SendtoHand(g4,PLAYER_TWO,REASON_RULE)
@@ -274,9 +274,9 @@ function Rule.EndGameOperation(e,tp,eg,ep,ev,re,r,rp)
 	local ct2=Duel.GetVP(PLAYER_TWO)
 	Duel.SetLP(PLAYER_TWO,ct2)
 	if ct1>ct2 then
-		Duel.Win(PLAYER_TWO,WIN_REASON_VP)
-	elseif ct1<ct2 then
 		Duel.Win(PLAYER_ONE,WIN_REASON_VP)
+	elseif ct1<ct2 then
+		Duel.Win(PLAYER_TWO,WIN_REASON_VP)
 	elseif ct1==ct2 then
 		Duel.Win(PLAYER_ONE,WIN_REASON_VP)
 		Duel.Win(PLAYER_TWO,WIN_REASON_VP)

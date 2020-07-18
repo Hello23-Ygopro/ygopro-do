@@ -51,29 +51,29 @@ end
 function Duel.RemoveAction(player,count)
 	--player: the player to remove the actions from
 	--count: the amount of actions to remove
-	Duel.GetCounterHolder(player):RemoveCounter(player,COUNTER_ACTIONS,count,REASON_RULE)
+	return Duel.GetCounterHolder(player):RemoveCounter(player,COUNTER_ACTIONS,count,REASON_RULE)
 end
 --decrease a player's buys
 function Duel.RemoveBuy(player,count)
 	--player: the player to remove the buys from
 	--count: the amount of buys to remove
-	Duel.GetCounterHolder(player):RemoveCounter(player,COUNTER_BUYS,count,REASON_RULE)
+	return Duel.GetCounterHolder(player):RemoveCounter(player,COUNTER_BUYS,count,REASON_RULE)
 end
 --decrease a player's coins
 function Duel.RemoveCoin(player,count)
 	--player: the player to remove the coins from
 	--count: the amount of coins to remove
-	Duel.GetCounterHolder(player):RemoveCounter(player,COUNTER_COINS,count,REASON_RULE)
+	return Duel.GetCounterHolder(player):RemoveCounter(player,COUNTER_COINS,count,REASON_RULE)
 end
---get the number of actions a player has
+--get the amount of actions a player has
 function Duel.GetActions(player)
 	return Duel.GetCounterHolder(player):GetCounter(COUNTER_ACTIONS)
 end
---get the number of buys a player has
+--get the amount of buys a player has
 function Duel.GetBuys(player)
 	return Duel.GetCounterHolder(player):GetCounter(COUNTER_BUYS)
 end
---get the number of coins a player has
+--get the amount of coins a player has
 function Duel.GetCoins(player)
 	return Duel.GetCounterHolder(player):GetCounter(COUNTER_COINS)
 end
@@ -82,17 +82,14 @@ function Duel.IsPlayerCanPlayAction(player)
 	if Duel.GetTurnPlayer()~=player or Duel.GetCurrentPhase()~=PHASE_ACTION then return false end
 	return Duel.GetActions(player)>0
 end
---check if a player can play buy
+--check if a player can play a treasure card
 function Duel.IsPlayerCanBuy(player)
 	if Duel.GetTurnPlayer()~=player or Duel.GetCurrentPhase()~=PHASE_BUY then return false end
 	return Duel.GetBuys(player)>0
 end
 --get the total amount of coins a player has in play
 function Duel.GetCoin(player)
-	local f=function(c)
-		return c:IsType(TYPE_TREASURE) and not c:IsReason(REASON_TRASH)
-	end
-	local g=Duel.GetMatchingGroup(f,player,LOCATION_INPLAY,0,nil)
+	local g=Duel.GetMatchingGroup(aux.InPlayFilter(Card.IsType),player,LOCATION_INPLAY,0,nil,TYPE_TREASURE)
 	return g:GetSum(Card.GetCoin)
 end
 --get the total amount of victory points a player has
@@ -117,9 +114,9 @@ function Duel.SendtoInPlay(targets,reason)
 		e1:SetReset(RESET_EVENT+RESET_CHAIN)
 		Duel.RegisterEffect(e1,tc:GetControler())
 	end
-	return Duel.Remove(targets,POS_FACEUP,reason)
+	return Duel.Remove(targets,POS_FACEUP,reason,tc:GetControler())
 end
---gain a card from the supply
+--gain a card
 function Duel.GainCards(targets,reason,player,dest_loc)
 	--dest_loc: where to put the gained card (discard pile by default)
 	if type(targets)=="Card" then targets=Group.FromCards(targets) end
@@ -136,8 +133,8 @@ function Duel.GainCards(targets,reason,player,dest_loc)
 				Duel.ShuffleHand(player)
 			else
 				Duel.SendtoDPile(card,reason,player)
-				tc:RemoveCounter(player,COUNTER_COPIES,1,REASON_RULE)
 			end
+			tc:RemoveCounter(player,COUNTER_COPIES,1,REASON_RULE)
 		else
 			if dest_loc==LOCATION_DECK then
 				Duel.SendtoDeck(tc,player,SEQ_DECK_SHUFFLE,reason)
@@ -166,12 +163,12 @@ function Duel.Trash(targets,reason,player)
 			Duel.DisableShuffleCheck()
 			Duel.SendtoHand(tc,player,REASON_RULE)
 		end
-		res=res+Duel.Remove(tc,POS_FACEUP,REASON_TRASH+reason,player)
+		res=res+Duel.Remove(tc,POS_FACEUP,reason+REASON_TRASH,player)
 	end
 	return res
 end
 --get the number of cards a player has
-function Duel.CardCount(player)
+function Duel.GetCardCount(player)
 	return Duel.GetFieldGroupCount(player,LOCATION_HAND+LOCATION_DECK+LOCATION_DPILE+LOCATION_TRASH,0)
 end
 --play an action card
@@ -192,7 +189,7 @@ end
 function Duel.CheckProvincePile()
 	return Duel.GetFirstMatchingCard(aux.SupplyFilter(Card.IsCode),0,LOCATION_SUPPLY,LOCATION_SUPPLY,nil,CARD_PROVINCE)
 end
---get the number of empty supply piles a player has
+--get the number of empty supply piles
 function Duel.GetEmptySupplyPiles()
 	local ct=Duel.GetMatchingGroupCount(aux.SupplyFilter(),0,LOCATION_SUPPLY,LOCATION_SUPPLY,nil)
 	return 17-ct
