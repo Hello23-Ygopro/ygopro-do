@@ -175,6 +175,7 @@ end
 --move a card to the in play area when it is played
 function Duel.SendtoInPlay(targets,reason)
 	if type(targets)=="Card" then targets=Group.FromCards(targets) end
+	local tc=targets:GetFirst()
 	for tc in aux.Next(targets) do
 		--check for "You may play an Action card from your hand twice" (Throne Room 1-024)
 		local e1=Effect.CreateEffect(tc)

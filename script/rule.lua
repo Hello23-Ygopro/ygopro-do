@@ -278,8 +278,7 @@ function Rule.EndGameOperation(e,tp,eg,ep,ev,re,r,rp)
 	elseif ct1<ct2 then
 		Duel.Win(PLAYER_TWO,WIN_REASON_VP)
 	elseif ct1==ct2 then
-		Duel.Win(PLAYER_ONE,WIN_REASON_VP)
-		Duel.Win(PLAYER_TWO,WIN_REASON_VP)
+		Duel.Win(PLAYER_NONE,WIN_REASON_VP)
 	end
 end
 --override yugioh rules
