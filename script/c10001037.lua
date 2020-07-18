@@ -1,10 +1,10 @@
 --Bandit
 local scard,sid=aux.GetID()
 function scard.initial_effect(c)
-	--gain supply, confirm (trash, discard deck)
+	--gain, confirm (trash, discard deck)
 	aux.AddActionEffect(c,scard.op1)
 end
---gain supply, confirm (trash, discard deck)
+--gain, confirm (trash, discard deck)
 function scard.trfilter(c)
 	return c:IsType(TYPE_TREASURE) and not c:IsCode(CARD_COPPER) and c:IsAbleToTrash()
 end

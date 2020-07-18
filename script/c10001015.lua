@@ -1,10 +1,10 @@
 --Bureaucrat
 local scard,sid=aux.GetID()
 function scard.initial_effect(c)
-	--gain supply (to deck), to deck
+	--gain (to deck), to deck
 	aux.AddActionEffect(c,scard.op1)
 end
---gain supply (to deck), to deck
+--gain (to deck), to deck
 function scard.tdfilter(c)
 	return c:IsType(TYPE_VICTORY) and c:IsAbleToDeck()
 end

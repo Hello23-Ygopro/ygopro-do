@@ -1,10 +1,10 @@
 --Remodel
 local scard,sid=aux.GetID()
 function scard.initial_effect(c)
-	--trash, gain supply
+	--trash, gain
 	aux.AddActionEffect(c,scard.op1)
 end
---trash, gain supply
+--trash, gain
 function scard.op1(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TRASH)
 	local g1=Duel.SelectMatchingCard(tp,Card.IsAbleToTrash,tp,LOCATION_HAND,0,1,1,nil)

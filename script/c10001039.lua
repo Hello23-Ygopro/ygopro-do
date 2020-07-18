@@ -1,10 +1,10 @@
 --Artisan
 local scard,sid=aux.GetID()
 function scard.initial_effect(c)
-	--gain supply (to hand), to deck
+	--gain (to hand), to deck
 	aux.AddActionEffect(c,scard.op1)
 end
---gain supply (to hand), to deck
+--gain (to hand), to deck
 function scard.thfilter(c)
 	return c:IsCostBelow(5) and c:IsAbleToHand()
 end

@@ -1,10 +1,10 @@
 --Mine
 local scard,sid=aux.GetID()
 function scard.initial_effect(c)
-	--trash, gain supply (to hand)
+	--trash, gain (to hand)
 	aux.AddActionEffect(c,scard.op1)
 end
---trash, gain supply (to hand)
+--trash, gain (to hand)
 function scard.trfilter(c)
 	return c:IsType(TYPE_TREASURE) and c:IsAbleToTrash()
 end

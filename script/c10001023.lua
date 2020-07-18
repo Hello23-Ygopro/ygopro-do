@@ -1,10 +1,10 @@
 --Thief
 local scard,sid=aux.GetID()
 function scard.initial_effect(c)
-	--confirm (trash, gain supply, discard deck)
+	--confirm (trash, gain, discard deck)
 	aux.AddActionEffect(c,scard.op1)
 end
---confirm (trash, gain supply, discard deck)
+--confirm (trash, gain, discard deck)
 function scard.trfilter(c)
 	return c:IsType(TYPE_TREASURE) and c:IsAbleToTrash()
 end

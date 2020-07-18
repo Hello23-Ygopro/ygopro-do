@@ -1,10 +1,10 @@
 --Feast
 local scard,sid=aux.GetID()
 function scard.initial_effect(c)
-	--trash, gain supply
+	--trash, gain
 	aux.AddActionEffect(c,scard.op1)
 end
---trash, gain supply
+--trash, gain
 function scard.op1(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Trash(e:GetHandler(),REASON_EFFECT,tp)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_GAIN)
