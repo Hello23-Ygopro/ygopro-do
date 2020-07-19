@@ -74,11 +74,11 @@ function Rule.ApplyRules(e,tp,eg,ep,ev,re,r,rp)
 	e7:SetCountLimit(1)
 	e7:SetOperation(Rule.CleanupOperation)
 	Duel.RegisterEffect(e7,0)
-	--count vp
+	--show score
 	local e8=Effect.GlobalEffect()
 	e8:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
 	e8:SetCode(EVENT_ADJUST)
-	e8:SetOperation(Rule.CountVPOperation)
+	e8:SetOperation(Rule.ShowScoreOperation)
 	Duel.RegisterEffect(e8,0)
 	--end game
 	local e9=Effect.GlobalEffect()
@@ -253,12 +253,12 @@ function Rule.CleanupOperation(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Draw(turnp,5,REASON_RULE)
 	Duel.EndTurn()
 end
---count vp
-function Rule.CountVPOperation(e,tp,eg,ep,ev,re,r,rp)
+--show score
+function Rule.ShowScoreOperation(e,tp,eg,ep,ev,re,r,rp)
 	local ct1=Duel.GetVP(PLAYER_ONE)
 	local ct2=Duel.GetVP(PLAYER_TWO)
-	if Duel.GetScore(PLAYER_ONE)~=ct1 then Duel.SetScore(PLAYER_ONE,ct1) end
-	if Duel.GetScore(PLAYER_TWO)~=ct2 then Duel.SetScore(PLAYER_TWO,ct2) end
+	if Duel.GetScore(PLAYER_ONE)~=ct1 and ct1>=0 then Duel.SetScore(PLAYER_ONE,ct1) end
+	if Duel.GetScore(PLAYER_TWO)~=ct2 and ct2>=0 then Duel.SetScore(PLAYER_TWO,ct2) end
 end
 --end game
 function Rule.EndGameCondition(e)
@@ -280,8 +280,8 @@ function Rule.EndGameOperation(e,tp,eg,ep,ev,re,r,rp)
 	Duel.ConfirmCards(PLAYER_TWO,g3)
 	Duel.SendtoHand(g4,PLAYER_TWO,REASON_RULE)
 	Duel.ConfirmCards(PLAYER_ONE,g4)
-	local ct1=Duel.GetScore(PLAYER_ONE)
-	local ct2=Duel.GetScore(PLAYER_TWO)
+	local ct1=Duel.GetVP(PLAYER_ONE)
+	local ct2=Duel.GetVP(PLAYER_TWO)
 	if ct1>ct2 then
 		Duel.Win(PLAYER_ONE,WIN_REASON_VP)
 	elseif ct1<ct2 then
