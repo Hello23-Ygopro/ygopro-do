@@ -164,8 +164,15 @@ function Duel.IsPlayerCanBuy(player)
 end
 --get the total amount of victory points a player has
 function Duel.GetVP(player)
-	local g=Duel.GetMatchingGroup(Card.IsHasVP,player,LOCATION_ALL-LOCATION_SUPPLY,0,nil)
-	return g:GetSum(Card.GetVP)
+	local g1=Duel.GetMatchingGroup(Card.IsHasVP,player,LOCATION_ALL-LOCATION_SUPPLY,0,nil)
+	local g2=Duel.GetMatchingGroup(aux.TrashFilter(),player,LOCATION_TRASH,0,nil)
+	g1:Sub(g2)
+	local res=g1:GetSum(Card.GetVP)
+	if res<0 then
+		return 0
+	else
+		return res
+	end
 end
 --move a card to the in play area when it is played
 function Duel.SendtoInPlay(targets,reason)
@@ -266,5 +273,9 @@ function Duel.GetEmptySupplyPiles()
 	return 17-ct
 end
 --Renamed Duel functions
+--get a player's score
+Duel.GetScore=Duel.GetLP
+--set a player's score
+Duel.SetScore=Duel.SetLP
 --send a card to the discard pile
 Duel.SendtoDPile=Duel.SendtoGrave

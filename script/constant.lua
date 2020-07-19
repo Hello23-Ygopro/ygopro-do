@@ -618,7 +618,7 @@ EFFECT_SET_BATTLE_ATTACK			=362	--(unused, not available in YGOPro Percy)
 EFFECT_SET_BATTLE_DEFENSE			=363	--(unused, not available in YGOPro Percy)
 --The following is only available in YGOPro Percy
 EFFECT_CANNOT_LOSE_DECK				=400	--Cannot lose when unable to draw a card
-EFFECT_CANNOT_LOSE_LP				=401	--(unused)
+EFFECT_CANNOT_LOSE_LP				=401	--Cannot lose when Life Points are reduced to 0
 EFFECT_CANNOT_LOSE_EFFECT			=402	--(unused)
 EFFECT_BP_FIRST_TURN				=403	--(unused)
 EFFECT_UNSTOPPABLE_ATTACK			=404	--(unused)

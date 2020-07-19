@@ -27,9 +27,6 @@ function Rule.ApplyRules(e,tp,eg,ep,ev,re,r,rp)
 	--draw starting hand
 	Duel.Draw(PLAYER_ONE,5,REASON_RULE)
 	Duel.Draw(PLAYER_TWO,5,REASON_RULE)
-	--set lp
-	Duel.SetLP(PLAYER_ONE,1)
-	Duel.SetLP(PLAYER_TWO,1)
 	--start turn
 	local e1=Effect.GlobalEffect()
 	e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
@@ -77,15 +74,21 @@ function Rule.ApplyRules(e,tp,eg,ep,ev,re,r,rp)
 	e7:SetCountLimit(1)
 	e7:SetOperation(Rule.CleanupOperation)
 	Duel.RegisterEffect(e7,0)
-	--end game
+	--count vp
 	local e8=Effect.GlobalEffect()
-	e8:SetProperty(EFFECT_FLAG_IGNORE_IMMUNE)
 	e8:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
-	e8:SetCode(EVENT_TURN_END)
-	e8:SetCountLimit(1)
-	e8:SetCondition(Rule.EndGameCondition)
-	e8:SetOperation(Rule.EndGameOperation)
+	e8:SetCode(EVENT_ADJUST)
+	e8:SetOperation(Rule.CountVPOperation)
 	Duel.RegisterEffect(e8,0)
+	--end game
+	local e9=Effect.GlobalEffect()
+	e9:SetProperty(EFFECT_FLAG_IGNORE_IMMUNE)
+	e9:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+	e9:SetCode(EVENT_TURN_END)
+	e9:SetCountLimit(1)
+	e9:SetCondition(Rule.EndGameCondition)
+	e9:SetOperation(Rule.EndGameOperation)
+	Duel.RegisterEffect(e9,0)
 	--override yugioh rules
 	--cannot draw
 	Rule.cannot_draw()
@@ -250,6 +253,13 @@ function Rule.CleanupOperation(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Draw(turnp,5,REASON_RULE)
 	Duel.EndTurn()
 end
+--count vp
+function Rule.CountVPOperation(e,tp,eg,ep,ev,re,r,rp)
+	local ct1=Duel.GetVP(PLAYER_ONE)
+	local ct2=Duel.GetVP(PLAYER_TWO)
+	if Duel.GetScore(PLAYER_ONE)~=ct1 then Duel.SetScore(PLAYER_ONE,ct1) end
+	if Duel.GetScore(PLAYER_TWO)~=ct2 then Duel.SetScore(PLAYER_TWO,ct2) end
+end
 --end game
 function Rule.EndGameCondition(e)
 	return not Duel.CheckProvincePile() or Duel.GetEmptySupplyPiles()>=3
@@ -257,19 +267,21 @@ end
 function Rule.EndGameOperation(e,tp,eg,ep,ev,re,r,rp)
 	local g1=Duel.GetMatchingGroup(aux.TRUE,PLAYER_ONE,LOCATION_ALL-LOCATION_DECK-LOCATION_SUPPLY,0,nil)
 	local g2=Duel.GetMatchingGroup(aux.TRUE,PLAYER_TWO,LOCATION_ALL-LOCATION_DECK-LOCATION_SUPPLY,0,nil)
+	local sg1=Duel.GetMatchingGroup(aux.TrashFilter(),PLAYER_ONE,LOCATION_TRASH,0,nil)
+	local sg2=Duel.GetMatchingGroup(aux.TrashFilter(),PLAYER_TWO,LOCATION_TRASH,0,nil)
+	g1:Sub(sg1)
+	g2:Sub(sg2)
+	Duel.DisableShuffleCheck()
 	Duel.SendtoDeck(g1,PLAYER_ONE,SEQ_DECK_SHUFFLE,REASON_RULE)
 	Duel.SendtoDeck(g2,PLAYER_TWO,SEQ_DECK_SHUFFLE,REASON_RULE)
 	local g3=Duel.GetMatchingGroup(Card.IsHasVP,PLAYER_ONE,LOCATION_DECK,0,nil)
 	local g4=Duel.GetMatchingGroup(Card.IsHasVP,PLAYER_TWO,LOCATION_DECK,0,nil)
-	Duel.DisableShuffleCheck()
 	Duel.SendtoHand(g3,PLAYER_ONE,REASON_RULE)
 	Duel.ConfirmCards(PLAYER_TWO,g3)
 	Duel.SendtoHand(g4,PLAYER_TWO,REASON_RULE)
 	Duel.ConfirmCards(PLAYER_ONE,g4)
-	local ct1=Duel.GetVP(PLAYER_ONE)
-	Duel.SetLP(PLAYER_ONE,ct1)
-	local ct2=Duel.GetVP(PLAYER_TWO)
-	Duel.SetLP(PLAYER_TWO,ct2)
+	local ct1=Duel.GetScore(PLAYER_ONE)
+	local ct2=Duel.GetScore(PLAYER_TWO)
 	if ct1>ct2 then
 		Duel.Win(PLAYER_ONE,WIN_REASON_VP)
 	elseif ct1<ct2 then
@@ -358,4 +370,7 @@ function Rule.cannot_lose()
 	e1:SetCode(EFFECT_CANNOT_LOSE_DECK)
 	e1:SetTargetRange(1,1)
 	Duel.RegisterEffect(e1,0)
+	local e2=e1:Clone()
+	e2:SetCode(EFFECT_CANNOT_LOSE_LP)
+	Duel.RegisterEffect(e2,0)
 end

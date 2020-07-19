@@ -1,6 +1,7 @@
 ## Rules
 - [ ] **Only supported for 2 players**
 - [ ] **If players tie for Victory points (VP), a player who tied but had fewer turns doesn't win**
+- [ ] **If players have negative VP, their score shows 0**
 ## Deck Building
 - [ ] **The 10 Kingdom cards are chosen at random at the start of the game**
 ## Zones
