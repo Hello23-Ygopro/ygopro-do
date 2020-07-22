@@ -220,18 +220,30 @@ kingdom_card_list["Renaissance"]={
 	10013021,10013022,10013023,10013024,10013025
 }
 function Rule.setup_kingdom_cards()
-	local os=require('os')
-	math.randomseed(os.time())
-	local t=kingdom_card_list["Base"]
+	--choose a card set
+	local card_list={}
+	local sel_list={0x1,0x2}
+	local option_list={OPTION_BASE,OPTION_INTRIGUE}
+	Duel.Hint(HINT_SELECTMSG,PLAYER_ONE,HINTMSG_CHOOSESET)
+	local opt=Duel.SelectOption(PLAYER_ONE,table.unpack(option_list))+1
+	local sel=sel_list[opt]
+	if bit.band(sel,0x1)~=0 then
+		card_list=kingdom_card_list["Base"]
+	end
+	if bit.band(sel,0x2)~=0 then
+		card_list=kingdom_card_list["Intrigue"]
+	end
+	--add cards to the game
 	for i=1,10 do
-		local random=math.random(#t)
-		local code=t[random]
+		local random=Duel.GetRandomNumber(1,#card_list)
+		local code=card_list[random]
 		local card=Duel.CreateCard(PLAYER_ONE,code)
 		Duel.SendtoDeck(card,PLAYER_ONE,SEQ_DECK_TOP,REASON_RULE)
 		--add kingdom card status
 		card:SetStatus(STATUS_KINGDOM,true)
-		table.remove(t,random)
+		table.remove(card_list,random)
 	end
+	--move cards to the supply
 	local mzone=0x1
 	local szone=0x1
 	local g=Duel.GetMatchingGroup(Card.IsStatus,PLAYER_ONE,LOCATION_DECK,0,nil,STATUS_KINGDOM)
@@ -295,6 +307,17 @@ function Rule.PutInPlayOperation(e,tp,eg,ep,ev,re,r,rp)
 		local g=Duel.GetMatchingGroup(Card.IsType,cp,LOCATION_HAND,0,nil,TYPE_TREASURE)
 		Duel.SendtoInPlay(g,REASON_RULE)
 		local coin=g:GetSum(Card.GetCoin)
+		--check for "Copper produces an extra $1 this turn" ("Coppersmith" 2-013)
+		if g:IsExists(Card.IsCode,1,nil,CARD_COPPER) then
+			local t={Duel.IsPlayerAffectedByEffect(cp,EFFECT_UPDATE_COPPER_PRODUCE)}
+			for _,te in pairs(t) do
+				if type(te:GetValue())=="function" then
+					coin=coin+te:GetValue()(te,c)
+				else
+					coin=coin+te:GetValue()
+				end
+			end
+		end
 		Duel.AddCoin(cp,coin)
 	end
 end
@@ -308,7 +331,7 @@ end
 function Rule.LimitAction(e,re,tp)
 	local rc=re:GetHandler()
 	return re:IsHasProperty(EFFECT_FLAG_PLAY_PARAM) and rc:IsType(TYPE_ACTION)
-		--check for "You may play an Action card from your hand twice" (Throne Room 1-024)
+		--check for "You may play an Action card from your hand twice" ("Throne Room" 1-024)
 		and not rc:IsHasEffect(EFFECT_PLAY_ACTION_TWICE)
 end
 --limit buys

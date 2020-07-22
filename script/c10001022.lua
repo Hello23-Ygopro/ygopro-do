@@ -10,10 +10,10 @@ function scard.op1(e,tp,eg,ep,ev,re,r,rp)
 	Duel.AddAction(tp,1)
 	Duel.ConfirmDecktop(tp,1)
 	if Duel.IsPlayerCanDiscardDeck(tp,1) and Duel.SelectYesNo(tp,YESNOMSG_DISCARDDECK) then
-		Duel.DiscardDeck(tp,1,REASON_EFFECT+REASON_DISCARD)
+		Duel.DiscardDeck(tp,1,REASON_EFFECT)
 	end
 	Duel.ConfirmDecktop(1-tp,1)
 	if Duel.IsPlayerCanDiscardDeck(1-tp,1) and Duel.SelectYesNo(tp,YESNOMSG_DISCARDDECK) then
-		Duel.DiscardDeck(1-tp,1,REASON_EFFECT+REASON_DISCARD)
+		Duel.DiscardDeck(1-tp,1,REASON_EFFECT)
 	end
 end

@@ -24,9 +24,7 @@ function scard.op1(e,tp,eg,ep,ev,re,r,rp)
 		Duel.SendtoDPile(sg2,REASON_EFFECT+REASON_DISCARD,tp)
 		g:Sub(sg2)
 	end
-	if g:GetCount()>1 then
-		Duel.SortDecktop(tp,tp,g:GetCount())
-	end
+	Duel.SortDecktop(tp,tp,g:GetCount())
 end
 --[[
 	References

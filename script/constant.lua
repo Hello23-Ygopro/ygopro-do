@@ -477,7 +477,7 @@ EFFECT_CHANGE_RACE					=122	--(unused)
 EFFECT_ADD_ATTRIBUTE				=125	--(unused)
 EFFECT_REMOVE_ATTRIBUTE				=126	--(unused)
 EFFECT_CHANGE_ATTRIBUTE				=127	--(unused)
-EFFECT_UPDATE_COST					=130	--(reserved) Increase/decrease cost
+EFFECT_UPDATE_COST					=130	--Increase/decrease cost
 EFFECT_CHANGE_COST					=131	--(reserved) Change cost
 EFFECT_UPDATE_RANK					=132	--(unused)
 EFFECT_CHANGE_RANK					=133	--(unused)
@@ -638,6 +638,10 @@ EFFECT_CHANGE_LINKMARKER			=425	--(unused)
 --The following is only available in YGOPro DO
 EFFECT_CHANGE_VP					=600	--Set the VP a card is worth ("Gardens" 1-020)
 EFFECT_PLAY_ACTION_TWICE			=601	--Action card may be played twice ("Throne Room" 1-024)
+EFFECT_UPDATE_COPPER_PRODUCE		=602	--Increase/decrease the amount of coin Copper produces ("Coppersmith" 2-013)
+EFFECT_UPDATE_SILVER_PRODUCE		=603	--(reserved) Increase/decrease the amount of coin Silver produces
+EFFECT_UPDATE_GOLD_PRODUCE			=604	--(reserved) Increase/decrease the amount of coin Gold produces
+EFFECT_UPDATE_PLATINUM_PRODUCE		=605	--(reserved) Increase/decrease the amount of coin Platinum produces
 --Event Code
 --Events that can be used as a trigger for Trigger Effects
 EVENT_STARTUP					=1000	--(unused)
@@ -761,18 +765,59 @@ HINTMSG_PLAY			=502	--Select a card to play.
 HINTMSG_TRASH			=503	--Select a card to trash.
 HINTMSG_TODECK			=504	--Select a card to put onto the deck.
 HINTMSG_PLAYTWICE		=505	--Select a card to play twice.
+HINTMSG_CHOOSESET		=506	--Play with which set?
+HINTMSG_PASS			=507	--Select a card to pass to your opponent.
+HINTMSG_ANNOUNCENAME	=508	--Name a card.
+HINTMSG_ANNOUNCESEQ		=509	--Put where in the deck?
+HINTMSG_CONFIRM			=510	--Select a card to show your opponent.
 --Information displayed in a dialog box
 ERROR_NOTARGETS			=1630	--There is no applicable card.
+ERROR_NOBONUSES			=1631	--You did not meet the requirements to gain a bonus.
 --Yes No Message (for Duel.SelectYesNo)
 YESNOMSG_DECKTODPILE	=600	--Put your deck into the discard pile?
 YESNOMSG_DISCARDDECK	=601	--Discard a card from the deck?
 YESNOMSG_GAINCARD		=602	--Gain a card?
 YESNOMSG_PLAY			=603	--Play a card?
+YESNOMSG_TRASH			=604	--Trash a card?
+YESNOMSG_DISCARDHAND	=605	--Discard a card?
+YESNOMSG_USEPROMO		=700	--(reserved) Use promotional cards?
+YESNOMSG_USEBASE		=701	--Use cards from Base?
+YESNOMSG_USEINTRIGUE	=702	--Use cards from Intrigue?
+YESNOMSG_USESEASIDE		=703	--(reserved) Use cards from Seaside?
+YESNOMSG_USEALCHEMY		=704	--(reserved) Use cards from Alchemy?
+YESNOMSG_USEPROSPERITY	=705	--(reserved) Use cards from Prosperity?
+YESNOMSG_USECORNUCOPIA	=706	--(reserved) Use cards from Cornucopia?
+YESNOMSG_USEHINTERLANDS	=707	--(reserved) Use cards from Hinterlands?
+YESNOMSG_USEDARKAGES	=708	--(reserved) Use cards from Dark Ages?
+YESNOMSG_USEGUILDS		=709	--(reserved) Use cards from Guilds?
+YESNOMSG_USEADVENTURES	=710	--(reserved) Use cards from Adventures?
+YESNOMSG_USEEMPIRES		=711	--(reserved) Use cards from Empires?
+YESNOMSG_USENOCTURNE	=712	--(reserved) Use cards from Nocturne?
+YESNOMSG_USEMENAGERIE	=713	--(reserved) Use cards from Menagerie?
+YESNOMSG_USERENAISSANCE	=714	--(reserved) Use cards from Renaissance?
 --Option (for Duel.SelectOption)
 OPTION_HEADS			=60		--(unused)
 OPTION_TAILS			=61		--(unused)
+OPTION_DECKTOP			=1170	--Top of the deck.
+OPTION_DECKBOT			=1171	--Bottom of the deck.
+OPTION_DECKSHF			=1172	--Shuffle into the deck.
+OPTION_BASE				=1650	--Base
+OPTION_INTRIGUE			=1651	--Intrigue
+OPTION_SEASIDE			=1652	--(reserved) Seaside
+OPTION_ALCHEMY			=1653	--(reserved) Alchemy
+OPTION_PROSPERITY		=1654	--(reserved) Prosperity
+OPTION_CORNUCOPIA		=1655	--(reserved) Cornucopia
+OPTION_HINTERLANDS		=1656	--(reserved) Hinterlands
+OPTION_DARK_AGES		=1657	--(reserved) Dark Ages
+OPTION_GUILDS			=1658	--(reserved) Guilds
+OPTION_ADVENTURES		=1659	--(reserved) Adventures
+OPTION_EMPIRES			=1660	--(reserved) Empires
+OPTION_NOCTURNE			=1661	--(reserved) Nocturne
+OPTION_RENAISSANCE		=1662	--(reserved) Renaissance
+OPTION_MENAGERIE		=1663	--(reserved) Menagerie
 --Description (for SetDescription, EFFECT_FLAG_CLIENT_HINT)
 DESC_PLAY_TWICE			=300	--May be played twice
+DESC_MORE_COPPER		=400	--Copper produces more $
 --Timing
 --Free Chain activation timing
 TIMING_ACTION_PHASE			=0x1		--Action phase

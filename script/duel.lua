@@ -12,6 +12,16 @@ function Duel.ConfirmDecktop(player,count)
 	if deck_count>0 and count>deck_count and g:GetCount()==0 then count=deck_count end
 	return duel_confirm_decktop(player,count)
 end
+--sort the top cards of a player's deck
+--Note: Overwritten to only let a player sort cards if there are more than 1
+local duel_sort_decktop=Duel.SortDecktop
+function Duel.SortDecktop(sort_player,target_player,count)
+	if Duel.GetFieldGroupCount(target_player,LOCATION_DECK,0)>1 then
+		return duel_sort_decktop(sort_player,target_player,count)
+	else
+		return nil
+	end
+end
 --draw a card
 --Note: Overwritten to put the discard pile onto the deck
 local duel_draw=Duel.Draw
@@ -55,6 +65,17 @@ function Duel.DiscardDeck(player,count,reason)
 	end
 	return res
 end
+--get the first card that is in a specified location
+--Note: Overwritten to notify a player if there are no cards
+local duel_get_first_matching_card=Duel.GetFirstMatchingCard
+function Duel.GetFirstMatchingCard(f,player,s,o,ex,...)
+	if not Duel.IsExistingMatchingCard(f,player,s,o,1,ex,...) then
+		Duel.Hint(HINT_MESSAGE,player,ERROR_NOTARGETS)
+		--fix error if a card does not exist
+		return Group.CreateGroup()
+	end
+	return duel_get_first_matching_card(f,player,s,o,ex,...)
+end
 --select a card
 --Note: Overwritten to notify a player if there are no cards to select
 local duel_select_matching_card=Duel.SelectMatchingCard
@@ -74,6 +95,19 @@ function Duel.SelectTarget(sel_player,f,player,s,o,min,max,ex,...)
 	return duel_select_target(sel_player,f,player,s,o,min,max,ex,...)
 end
 --New Duel functions
+--generate a random number
+--With no arguments, returns a random number in the range [0, 1). That is, zero up to but excluding 1.
+--With 1 argument, returns an integer in the range [1, n]. That is from 1 up to and including n.
+--With 2 arguments, returns an integer in the range [n, u]. That is from n up to and including u.
+function Duel.GetRandomNumber(n,u)
+	local os=require('os')
+	math.randomseed(os.time())
+	return math.random(n,u)
+end
+--get the operated card
+function Duel.GetOperatedCard()
+	return Duel.GetOperatedGroup():GetFirst()
+end
 --generate a card
 function Duel.CreateCard(player,code)
 	--player: the player who generates the card
@@ -94,6 +128,13 @@ function Duel.EndTurn()
 	if ct1>0 then Duel.RemoveAction(turnp,ct1) end
 	if ct2>0 then Duel.RemoveBuy(turnp,ct2) end
 	if ct3>0 then Duel.RemoveCoin(turnp,ct3) end
+end
+--get all cards a player has
+function Duel.GetAllCards(player)
+	local g=Duel.GetMatchingGroup(nil,player,LOCATION_ALL-LOCATION_SUPPLY,0,nil)
+	local sg=Duel.GetMatchingGroup(aux.TrashFilter(),player,LOCATION_TRASH,0,nil)
+	g:Sub(sg)
+	return g
 end
 --get a player's counter holder (not available in the official game)
 --Note: returns Card if player~=nil, otherwise returns Group
@@ -164,17 +205,15 @@ function Duel.IsPlayerCanBuy(player)
 end
 --get the total amount of victory points a player has
 function Duel.GetVP(player)
-	local g1=Duel.GetMatchingGroup(Card.IsHasVP,player,LOCATION_ALL-LOCATION_SUPPLY,0,nil)
-	local g2=Duel.GetMatchingGroup(aux.TrashFilter(),player,LOCATION_TRASH,0,nil)
-	g1:Sub(g2)
-	return g1:GetSum(Card.GetVP)
+	local g=Duel.GetAllCards(player)
+	return g:GetSum(Card.GetVP)
 end
 --move a card to the in play area when it is played
 function Duel.SendtoInPlay(targets,reason)
 	if type(targets)=="Card" then targets=Group.FromCards(targets) end
 	local tc=targets:GetFirst()
 	for tc in aux.Next(targets) do
-		--check for "You may play an Action card from your hand twice" (Throne Room 1-024)
+		--check for "You may play an Action card from your hand twice" ("Throne Room" 1-024)
 		local e1=Effect.CreateEffect(tc)
 		e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
 		e1:SetCode(EVENT_CHAIN_SOLVED)
@@ -236,9 +275,39 @@ function Duel.Trash(targets,reason,player)
 			Duel.DisableShuffleCheck()
 			Duel.SendtoHand(tc,player,REASON_RULE)
 		end
+		--check a card is in the supply
+		if tc:IsLocation(LOCATION_SUPPLY) and tc:GetCounter(COUNTER_COPIES)>1 then
+			tc=Duel.CreateCard(player,tc:GetCode())
+			tc:RemoveCounter(player,COUNTER_COPIES,1,REASON_RULE)
+		end
 		res=res+Duel.Remove(tc,POS_FACEUP,reason+REASON_TRASH,player)
 	end
 	return res
+end
+--trash the top cards of a player's deck
+function Duel.TrashDeck(player,count,reason)
+	local res=0
+	local deck_count=Duel.GetFieldGroupCount(player,LOCATION_DECK,0)
+	local g1=Duel.GetMatchingGroup(Card.IsAbleToDeck,player,LOCATION_DPILE,0,nil)
+	if count>deck_count and g1:GetCount()>0 then
+		Duel.SendtoDeck(g1,player,SEQ_DECK_SHUFFLE,REASON_RULE)
+		Duel.ShuffleDeck(player)
+	end
+	if deck_count>0 and count>deck_count and g1:GetCount()==0 then count=deck_count end
+	--fix some cards sent to the wrong player's trash pile
+	if Duel.IsPlayerCanTrashDeck(player,count) then
+		for i=1,count do
+			local g2=Duel.GetDecktopGroup(player,1)
+			Duel.DisableShuffleCheck()
+			res=res+Duel.Trash(g2,reason,player)
+		end
+	end
+	return res
+end
+--check if a player can trash the top cards of a deck
+function Duel.IsPlayerCanTrashDeck(player,count)
+	local g=Duel.GetDecktopGroup(player,count)
+	return g:FilterCount(Card.IsAbleToTrash,nil)>0
 end
 --get the number of cards a player has
 function Duel.GetCardCount(player)

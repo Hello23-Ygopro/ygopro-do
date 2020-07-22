@@ -8,7 +8,7 @@ end
 function scard.op1(e,tp,eg,ep,ev,re,r,rp)
 	Duel.AddCoin(tp,2)
 	if Duel.DiscardDeck(tp,1,REASON_EFFECT)==0 then return end
-	local tc=Duel.GetOperatedGroup():GetFirst()
+	local tc=Duel.GetOperatedCard()
 	if tc:IsType(TYPE_ACTION) and Duel.SelectYesNo(tp,YESNOMSG_PLAY) then
 		Duel.PlayAction(tc)
 	end

@@ -3,11 +3,7 @@ local scard,sid=aux.GetID()
 function scard.initial_effect(c)
 	aux.AddVP(c,0)
 	--change vp
-	local e1=Effect.CreateEffect(c)
-	e1:SetType(EFFECT_TYPE_SINGLE)
-	e1:SetCode(EFFECT_CHANGE_VP)
-	e1:SetValue(scard.val1)
-	c:RegisterEffect(e1)
+	aux.AddChangeVP(c,scard.val1)
 end
 --change vp
 function scard.val1(e,c)

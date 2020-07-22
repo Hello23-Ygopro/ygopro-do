@@ -4,16 +4,13 @@ function scard.initial_effect(c)
 	--draw
 	aux.AddActionEffect(c,scard.op1)
 	--reaction (get effect)
-	aux.AddReactionEffect(c,scard.op2,scard.con1)
+	aux.AddReactionEffect(c,scard.op2,aux.ReactionCondition)
 end
 --draw
 function scard.op1(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Draw(tp,2,REASON_EFFECT)
 end
 --reaction (get effect)
-function scard.con1(e,tp,eg,ep,ev,re,r,rp)
-	return rp==1-tp and re:IsActiveType(TYPE_ATTACK)
-end
 function scard.op2(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	Duel.ConfirmCards(1-tp,c)

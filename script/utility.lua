@@ -135,6 +135,9 @@ function Auxiliary.AddVP(c,val)
 	local mt=getmetatable(c)
 	mt.vp=res
 end
+--list of all card types in the game
+--Note: Update this list if a new card type is introduced
+Auxiliary.type_list={TYPE_ACTION,TYPE_TREASURE,TYPE_VICTORY,TYPE_CURSE,TYPE_ATTACK,TYPE_REACTION}
 
 --treasure card
 function Auxiliary.EnableTreasureAttribute(c)
@@ -205,7 +208,21 @@ function Auxiliary.AddReactionEffect(c,op_func,con_func)
 	c:RegisterEffect(e1)
 	return e1
 end
+--"Worth n VP"
+--e.g. "Duke" (2-017)
+function Auxiliary.AddChangeVP(c,val)
+	local e1=Effect.CreateEffect(c)
+	e1:SetType(EFFECT_TYPE_SINGLE)
+	e1:SetCode(EFFECT_CHANGE_VP)
+	e1:SetValue(val)
+	return e1
+end
 
+--condition function for Reaction effects
+--e.g. "Secret Chamber" (2-003)
+function Auxiliary.ReactionCondition(e,tp,eg,ep,ev,re,r,rp)
+	return rp==1-tp and re:IsActiveType(TYPE_ATTACK)
+end
 --filter for a card in the supply
 function Auxiliary.SupplyFilter(f)
 	return	function(target,...)
