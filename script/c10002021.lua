@@ -1,15 +1,18 @@
 --Trading Post
 local scard,sid=aux.GetID()
 function scard.initial_effect(c)
-	--trash, gain
+	--trash, gain (to hand)
 	aux.AddActionEffect(c,scard.op1)
 end
---trash, gain
+--trash, gain (to hand)
+function scard.thfilter(c)
+	return c:IsCode(CARD_SILVER) and c:IsAbleToHand()
+end
 function scard.op1(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TRASH)
 	local g=Duel.SelectMatchingCard(tp,Card.IsAbleToTrash,tp,LOCATION_HAND,0,2,2,nil)
 	if g:GetCount()>0 and Duel.Trash(g,REASON_EFFECT,tp)>=2 then
-		local tc=Duel.GetFirstMatchingCard(aux.SupplyFilter(Card.IsCode),tp,LOCATION_SUPPLY,LOCATION_SUPPLY,nil,CARD_SILVER)
+		local tc=Duel.GetFirstMatchingCard(aux.SupplyFilter(scard.thfilter),tp,LOCATION_SUPPLY,LOCATION_SUPPLY,nil)
 		Duel.GainCards(tc,REASON_EFFECT,tp,LOCATION_HAND)
 	end
 end
