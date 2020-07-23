@@ -135,6 +135,7 @@ function Duel.GetAllCards(player)
 	local o1=0 and player or s1
 	local s2=LOCATION_TRASH
 	local o2=0 and player or s2
+	local player=player or 0
 	local g=Duel.GetMatchingGroup(nil,player,s1,o1,nil)
 	local sg=Duel.GetMatchingGroup(aux.TrashFilter(),player,s2,o2,nil)
 	g:Sub(sg)
