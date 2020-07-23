@@ -12,11 +12,11 @@ function scard.op1(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.GetMatchingGroup(Card.IsAbleToDeck,tp,LOCATION_HAND,0,nil)
 	if g:GetCount()==0 then return end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ANNOUNCESEQ)
-	local seq=Duel.SelectOption(tp,OPTION_DECKTOP,OPTION_DECKBOT,OPTION_DECKSHF)
+	local opt=Duel.SelectOption(tp,OPTION_DECKTOP,OPTION_DECKBOT,OPTION_DECKSHF)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
 	local sg=g:Select(tp,1,1,nil)
-	Duel.SendtoDeck(sg,tp,seq,REASON_EFFECT)
-	if seq==SEQ_DECK_SHUFFLE then Duel.ShuffleDeck(tp) end
+	Duel.SendtoDeck(sg,tp,opt,REASON_EFFECT)
+	if opt==OPTION_DECKSHF then Duel.ShuffleDeck(tp) end
 	--[[
 	local ct=Duel.GetFieldGroupCount(tp,LOCATION_DECK,0)
 	local t={}
@@ -37,7 +37,7 @@ end
 
 	Other Rules clarifications
 	* Where you put the card is public knowledge.
-	http://wiki.dominionstrategy.com/index.php/Secret Passage#Official_FAQ
+	http://wiki.dominionstrategy.com/index.php/Secret Passage#FAQ
 	
 	References
 		1. Ancient Telescope

@@ -20,7 +20,7 @@ function scard.op1(e,tp,eg,ep,ev,re,r,rp)
 	local seq=-1
 	local trcard=nil
 	for tc in aux.Next(g1) do
-		if tc:GetSequence()>seq then 
+		if tc:GetSequence()>seq then
 			seq=tc:GetSequence()
 			trcard=tc
 		end

@@ -6,6 +6,7 @@ function scard.initial_effect(c)
 end
 --add action, choose one (add coin or discard hand, draw)
 function scard.op1(e,tp,eg,ep,ev,re,r,rp)
+	Duel.AddAction(tp,1)
 	local sel_list={0x1,0x2}
 	local option_list={aux.Stringid(sid,1),aux.Stringid(sid,2)}
 	local opt=Duel.SelectOption(tp,table.unpack(option_list))+1

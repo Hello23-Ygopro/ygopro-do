@@ -96,7 +96,7 @@ function Duel.SelectTarget(sel_player,f,player,s,o,min,max,ex,...)
 end
 --New Duel functions
 --generate a random number
---With no arguments, returns a random number in the range [0, 1). That is, zero up to but excluding 1.
+--With no arguments, returns a random number in the range [0, 1]. That is, zero up to but excluding 1.
 --With 1 argument, returns an integer in the range [1, n]. That is from 1 up to and including n.
 --With 2 arguments, returns an integer in the range [n, u]. That is from n up to and including u.
 function Duel.GetRandomNumber(n,u)
@@ -131,8 +131,12 @@ function Duel.EndTurn()
 end
 --get all cards a player has
 function Duel.GetAllCards(player)
-	local g=Duel.GetMatchingGroup(nil,player,LOCATION_ALL-LOCATION_SUPPLY,0,nil)
-	local sg=Duel.GetMatchingGroup(aux.TrashFilter(),player,LOCATION_TRASH,0,nil)
+	local s1=LOCATION_ALL-LOCATION_SUPPLY
+	local o1=0 and player or s1
+	local s2=LOCATION_TRASH
+	local o2=0 and player or s2
+	local g=Duel.GetMatchingGroup(nil,player,s1,o1,nil)
+	local sg=Duel.GetMatchingGroup(aux.TrashFilter(),player,s2,o2,nil)
 	g:Sub(sg)
 	return g
 end
@@ -275,7 +279,7 @@ function Duel.Trash(targets,reason,player)
 			Duel.DisableShuffleCheck()
 			Duel.SendtoHand(tc,player,REASON_RULE)
 		end
-		--check a card is in the supply
+		--check if a card is in the supply
 		if tc:IsLocation(LOCATION_SUPPLY) and tc:GetCounter(COUNTER_COPIES)>1 then
 			tc=Duel.CreateCard(player,tc:GetCode())
 			tc:RemoveCounter(player,COUNTER_COPIES,1,REASON_RULE)

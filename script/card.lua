@@ -59,6 +59,16 @@ end
 function Card.IsHasVP(c)
 	return c.vp
 end
+--get the number of card types a card has
+function Card.GetTypeCount(c)
+	local res=0
+	for i,type in ipairs(aux.type_list) do
+		if c:IsType(type) then
+			res=res+1
+		end
+	end
+	return res
+end
 --Renamed Card functions
 --get a card's original cost
 Card.GetOriginalCost=Card.GetOriginalLevel

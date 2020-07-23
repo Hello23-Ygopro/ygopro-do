@@ -5,21 +5,22 @@ function scard.initial_effect(c)
 	aux.AddActionEffect(c,scard.op1)
 	if not scard.global_check then
 		scard.global_check=true
+		--register action
 		local ge1=Effect.CreateEffect(c)
 		ge1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
 		ge1:SetCode(EVENT_CHAINING)
-		ge1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
 		ge1:SetOperation(scard.regop1)
 		Duel.RegisterEffect(ge1,0)
 	end
 end
---add coin, draw, add action
+--register action
 function scard.regop1(e,tp,eg,ep,ev,re,r,rp)
 	local rc=re:GetHandler()
 	if rp==tp and rc:IsType(TYPE_ACTION) then
 		Duel.RegisterFlagEffect(rp,sid,RESET_PHASE+PHASE_END,0,1)
 	end
 end
+--add coin, draw, add action
 function scard.op1(e,tp,eg,ep,ev,re,r,rp)
 	Duel.AddCoin(tp,2)
 	if Duel.GetFlagEffect(tp,sid)>=3 then

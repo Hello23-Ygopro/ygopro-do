@@ -22,7 +22,7 @@ function scard.op1(e,tp,eg,ep,ev,re,r,rp)
 		Duel.GainCards(g2,REASON_EFFECT,tp)
 	end
 	if tc2:IsType(TYPE_VICTORY) then
-		local tc3=Duel.GetFirstMatchingCard(aux.SupplyFilter(Card.IsType),tp,LOCATION_SUPPLY,LOCATION_SUPPLY,nil,TYPE_CURSE)
+		local tc3=Duel.GetFirstMatchingCard(aux.SupplyFilter(Card.IsType),1-tp,LOCATION_SUPPLY,LOCATION_SUPPLY,nil,TYPE_CURSE)
 		Duel.GainCards(tc3,REASON_EFFECT,1-tp)
 	end
 end

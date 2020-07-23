@@ -215,6 +215,7 @@ function Auxiliary.AddChangeVP(c,val)
 	e1:SetType(EFFECT_TYPE_SINGLE)
 	e1:SetCode(EFFECT_CHANGE_VP)
 	e1:SetValue(val)
+	c:RegisterEffect(e1)
 	return e1
 end
 

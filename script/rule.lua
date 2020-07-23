@@ -308,13 +308,14 @@ function Rule.PutInPlayOperation(e,tp,eg,ep,ev,re,r,rp)
 		Duel.SendtoInPlay(g,REASON_RULE)
 		local coin=g:GetSum(Card.GetCoin)
 		--check for "Copper produces an extra $1 this turn" ("Coppersmith" 2-013)
-		if g:IsExists(Card.IsCode,1,nil,CARD_COPPER) then
+		local ct=g:FilterCount(Card.IsCode,nil,CARD_COPPER)
+		if ct>0 then
 			local t={Duel.IsPlayerAffectedByEffect(cp,EFFECT_UPDATE_COPPER_PRODUCE)}
 			for _,te in pairs(t) do
 				if type(te:GetValue())=="function" then
-					coin=coin+te:GetValue()(te,c)
+					coin=coin+(ct*te:GetValue())(te,c)
 				else
-					coin=coin+te:GetValue()
+					coin=coin+(ct*te:GetValue())
 				end
 			end
 		end

@@ -12,13 +12,13 @@ function scard.op1(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Draw(tp,3,REASON_EFFECT)
 	local sel_list={0x1,0x2}
 	local option_list={aux.Stringid(sid,1),aux.Stringid(sid,2)}
-	local opt=Duel.SelectOption(tp,table.unpack(option_list))+1
+	local opt=Duel.SelectOption(1-tp,table.unpack(option_list))+1
 	local sel=sel_list[opt]
 	if bit.band(sel,0x1)~=0 then
 		Duel.DiscardHand(1-tp,aux.TRUE,2,2,REASON_EFFECT+REASON_DISCARD)
 	end
 	if bit.band(sel,0x2)~=0 then
-		local tc=Duel.GetFirstMatchingCard(aux.SupplyFilter(scard.thfilter),tp,LOCATION_SUPPLY,LOCATION_SUPPLY,nil)
+		local tc=Duel.GetFirstMatchingCard(aux.SupplyFilter(scard.thfilter),1-tp,LOCATION_SUPPLY,LOCATION_SUPPLY,nil)
 		Duel.GainCards(tc,REASON_EFFECT,1-tp,LOCATION_HAND)
 	end
 end

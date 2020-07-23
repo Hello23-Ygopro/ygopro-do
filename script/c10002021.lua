@@ -10,7 +10,7 @@ function scard.op1(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.SelectMatchingCard(tp,Card.IsAbleToTrash,tp,LOCATION_HAND,0,2,2,nil)
 	if g:GetCount()>0 and Duel.Trash(g,REASON_EFFECT,tp)>=2 then
 		local tc=Duel.GetFirstMatchingCard(aux.SupplyFilter(Card.IsCode),tp,LOCATION_SUPPLY,LOCATION_SUPPLY,nil,CARD_SILVER)
-		Duel.GainCards(tc,REASON_EFFECT,tp)
+		Duel.GainCards(tc,REASON_EFFECT,tp,LOCATION_HAND)
 	end
 end
 --[[

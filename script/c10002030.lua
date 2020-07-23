@@ -11,12 +11,7 @@ function scard.op1(e,tp,eg,ep,ev,re,r,rp)
 	if not tc then return end
 	Duel.ConfirmCards(1-tp,tc)
 	Duel.ShuffleHand(tp)
-	local ct=0
-	for i,type in ipairs(aux.type_list) do
-		if tc:IsType(type) then
-			ct=ct+1
-		end
-	end
+	local ct=tc:GetTypeCount()
 	if ct==0 then
 		Duel.Hint(HINT_MESSAGE,tp,ERROR_NOBONUSES)
 		return
@@ -65,7 +60,7 @@ end
 	* First reveal a card from your hand, then count the types.
 	* Then choose one different thing per type the card had; if you revealed a card with two types, you pick two things.
 
-	http://wiki.dominionstrategy.com/index.php/Courtier#Official_FAQ
+	http://wiki.dominionstrategy.com/index.php/Courtier#FAQ
 
 	Other Rules clarifications
 	* Revealing a card with four types gives you all bonuses.

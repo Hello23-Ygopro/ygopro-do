@@ -15,6 +15,6 @@ function scard.op1(e,tp,eg,ep,ev,re,r,rp)
 		Duel.Draw(tp,3,REASON_EFFECT)
 	end
 	if bit.band(sel,0x2)~=0 then
-		Duel.AddCoin(tp,2)
+		Duel.AddAction(tp,2)
 	end
 end

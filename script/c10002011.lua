@@ -8,8 +8,9 @@ end
 function scard.op1(e,tp,eg,ep,ev,re,r,rp)
 	Duel.AddBuy(tp,1)
 	Duel.AddCoin(tp,1)
-	local g=Duel.GetAllCards(tp)
+	local g=Duel.GetAllCards()
 	for tc in aux.Next(g) do
+		--cost less
 		local e1=Effect.CreateEffect(e:GetHandler())
 		e1:SetType(EFFECT_TYPE_SINGLE)
 		e1:SetCode(EFFECT_UPDATE_COST)
@@ -26,7 +27,7 @@ end
 	but not less than $0.
 	* This is cumulative; if you play two Bridges (or the same Bridge twice via Throne Room), cards will cost $2 less.
 
-	http://wiki.dominionstrategy.com/index.php/Wishing_Well#FAQ
+	http://wiki.dominionstrategy.com/index.php/Bridge#FAQ
 
 	References
 		1. Cost Down

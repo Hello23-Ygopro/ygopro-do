@@ -6,7 +6,7 @@ function scard.initial_effect(c)
 end
 --get effect
 function scard.op1(e,tp,eg,ep,ev,re,r,rp)
-	--update copper produce
+	--increase copper produce
 	local e1=Effect.CreateEffect(e:GetHandler())
 	e1:SetType(EFFECT_TYPE_FIELD)
 	e1:SetCode(EFFECT_UPDATE_COPPER_PRODUCE)
