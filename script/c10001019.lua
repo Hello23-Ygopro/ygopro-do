@@ -20,6 +20,5 @@ end
 
 	Official FAQ
 	* You only get the +$3 if you actually trashed a Copper.
-
 	http://wiki.dominionstrategy.com/index.php/Moneylender#FAQ
 ]]

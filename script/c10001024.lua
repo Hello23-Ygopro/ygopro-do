@@ -1,10 +1,10 @@
 --Throne Room
 local scard,sid=aux.GetID()
 function scard.initial_effect(c)
-	--get effect
+	--gain effect
 	aux.AddActionEffect(c,scard.op1)
 end
---get effect
+--gain effect
 function scard.op1(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_PLAYTWICE)
 	local g=Duel.SelectMatchingCard(tp,Card.IsType,tp,LOCATION_HAND,0,1,1,nil,TYPE_ACTION)
@@ -47,6 +47,5 @@ end
 	* Remember that Throne Room does NOT "double" a card - it simply makes you play it twice. It may have different
 	effects the first and second time it is played, so remember to follow all the instructions on the card fully from top
 	to bottom, and then go back and follow them a second time.
-
 	http://wiki.dominionstrategy.com/index.php/Throne_Room#FAQ
 ]]

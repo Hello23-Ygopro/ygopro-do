@@ -19,10 +19,9 @@ end
 
 	Official FAQ
 	* If you Throne Room a Mining Village, you cannot trash it twice (and so cannot get the +$2 twice).
-
 	http://wiki.dominionstrategy.com/index.php/Mining_Village#FAQ
 
 	References
-		1. Judgment of Anubis
-		https://github.com/Fluorohydride/ygopro-scripts/blob/c96a760/c55256016.lua#L43
+	* Judgment of Anubis
+	https://github.com/Fluorohydride/ygopro-scripts/blob/c96a760/c55256016.lua#L43
 ]]

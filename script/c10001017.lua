@@ -20,6 +20,5 @@ end
 	Other Rules clarifications
 	* Cards on your Island mat, Durations still in play at the end of the game, and cards set aside for Haven or
 	Inheritance or for any other reason are also counted at the end of the game.
-
 	http://wiki.dominionstrategy.com/index.php/Gardens#FAQ
 ]]

@@ -20,6 +20,5 @@ end
 	Official FAQ
 	* If you pick "trash 2 cards from your hand" and only have one card in hand, you trash that card; if you choose that
 	option and have 2 or more cards in hand, you have to trash 2.
-
 	http://wiki.dominionstrategy.com/index.php/Shanty_Town#FAQ
 ]]

@@ -33,6 +33,5 @@ end
 
 	Other Rules clarifications
 	* You still draw 4 cards if you choose the discard option with no cards left in hand.
-
 	http://wiki.dominionstrategy.com/index.php/Minion#FAQ
 ]]

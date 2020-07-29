@@ -25,6 +25,5 @@ end
 	* If you have more than 7 cards in hand, you don't draw anything.
 	* If you have less than 7 cards in hand and your -1 Card token is on your deck, take it off before drawing, even if
 	you have no cards in your deck and/or discard pile.
-
 	http://wiki.dominionstrategy.com/index.php/Library#FAQ
 ]]

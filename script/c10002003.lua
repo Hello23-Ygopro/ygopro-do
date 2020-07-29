@@ -41,6 +41,5 @@ end
 	* You must reveal the Secret Chamber as soon as the Attack is played, but before any text on it is resolved. So if
 	your opponent plays Minion or Pirate Ship, you must finish drawing cards and then putting cards back on top before
 	your opponent makes their choice for which action on attack card to take.
-
 	http://wiki.dominionstrategy.com/index.php/Secret_Chamber#FAQ
 ]]

@@ -28,7 +28,6 @@ function scard.op1(e,tp,eg,ep,ev,re,r,rp)
 end
 --[[
 	References
-		1. Dark Magical Circle
-		https://github.com/Fluorohydride/ygopro-scripts/blob/cb54f7a/c47222536.lua#L38
-		
+	* Dark Magical Circle
+	https://github.com/Fluorohydride/ygopro-scripts/blob/cb54f7a/c47222536.lua#L38
 ]]

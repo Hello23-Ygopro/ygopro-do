@@ -3,14 +3,14 @@ local scard,sid=aux.GetID()
 function scard.initial_effect(c)
 	--draw
 	aux.AddActionEffect(c,scard.op1)
-	--reaction (get effect)
+	--reaction (gain effect)
 	aux.AddReactionEffect(c,scard.op2,aux.ReactionCondition)
 end
 --draw
 function scard.op1(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Draw(tp,2,REASON_EFFECT)
 end
---reaction (get effect)
+--reaction (gain effect)
 function scard.op2(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	Duel.ConfirmCards(1-tp,c)
@@ -52,6 +52,5 @@ end
 	that time.
 	* If an Attack card allows the player who played it to make a decision, like Minion or Pirate Ship, you must decide
 	whether to reveal Moat before the player decides what function of the Attack card to use.
-
 	http://wiki.dominionstrategy.com/index.php/Moat#FAQ
 ]]

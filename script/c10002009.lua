@@ -25,10 +25,9 @@ end
 	Official FAQ
 	* Reveal the top card of your deck. If it has the name you named, put it into your hand, otherwise leave it on your
 	deck.
-
 	http://wiki.dominionstrategy.com/index.php/Wishing_Well#FAQ
 
 	References
-		1. Archfiend's Oath
-		https://github.com/Fluorohydride/ygopro-scripts/blob/ed35639/c22796548.lua#L35
+	* Archfiend's Oath
+	https://github.com/Fluorohydride/ygopro-scripts/blob/ed35639/c22796548.lua#L35
 ]]

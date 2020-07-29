@@ -47,10 +47,9 @@ end
 	Official FAQ
 	* If he goes through all of his cards without finding a card costing $3 or more, he just discards everything revealed
 	and is done.
-
 	http://wiki.dominionstrategy.com/index.php/Saboteur#FAQ
-	
+
 	References
-		1. Magical Merchant
-		https://github.com/Fluorohydride/ygopro-scripts/blob/cb54f7a/c32362575.lua#L10
+	* Magical Merchant
+	https://github.com/Fluorohydride/ygopro-scripts/blob/cb54f7a/c32362575.lua#L10
 ]]

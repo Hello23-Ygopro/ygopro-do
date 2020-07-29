@@ -19,6 +19,5 @@ end
 	Official FAQ
 	* If you do play it, you move it into your play area and follow its instructions; this does not use up one of your
 	Action plays for the turn.
-
 	http://wiki.dominionstrategy.com/index.php/Vassal#FAQ
 ]]

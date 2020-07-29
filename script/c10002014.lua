@@ -32,6 +32,5 @@ end
 	Other Rules clarifications
 	* If you do not actually gain the card you chose, such as because of Trader or Possession, you get no bonus.
 	* If you gain an Inherited Estate, you get +1 Action and +1 Card.
-
 	http://wiki.dominionstrategy.com/index.php/Ironworks#FAQ
 ]]

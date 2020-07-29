@@ -12,7 +12,7 @@
 - [ ] **You don't always look through your entire deck when you take a card from it**
 - If you're required to take a specific card from your deck, the game will only show you the relevant cards.
 - [ ] **If you do the following with your deck, the game does not first put your discard pile onto your deck:**
-	- [x] `Duel.ConfirmDecktop` Looking/revealing more cards than are in your deck
+	- [x] `Duel.ConfirmDecktop`: Looking/revealing more cards than are in your deck
 	- [ ] `Duel.ConfirmCards`: Looking/revealing more cards than are in your deck
 	- [ ] `TBA`: Setting aside more cards than are in your deck
 	- [x] `Duel.DiscardDeck`: Discarding more cards than are in your deck

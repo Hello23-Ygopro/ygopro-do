@@ -1,10 +1,10 @@
 --Coppersmith
 local scard,sid=aux.GetID()
 function scard.initial_effect(c)
-	--get effect
+	--gain effect
 	aux.AddActionEffect(c,scard.op1)
 end
---get effect
+--gain effect
 function scard.op1(e,tp,eg,ep,ev,re,r,rp)
 	--increase copper produce
 	local e1=Effect.CreateEffect(e:GetHandler())
@@ -34,6 +34,5 @@ end
 	Other Rules clarifications
 	* The bonus value does not apply retroactively to Coppers in play before playing the Coppersmith (via Black Market
 	or Storyteller).
-
 	http://wiki.dominionstrategy.com/index.php/Coppersmith#FAQ
 ]]

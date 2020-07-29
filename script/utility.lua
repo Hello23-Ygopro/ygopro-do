@@ -219,7 +219,7 @@ function Auxiliary.AddChangeVP(c,val)
 	return e1
 end
 
---condition function for Reaction effects
+--condition for Reaction effects
 --e.g. "Secret Chamber" (2-003)
 function Auxiliary.ReactionCondition(e,tp,eg,ep,ev,re,r,rp)
 	return rp==1-tp and re:IsActiveType(TYPE_ATTACK)
@@ -300,35 +300,31 @@ loadutility("lua.lua")
 loadutility("rule.lua")
 --[[
 	References
-		Terminology
-		"Gain a card":
-		* Sometimes a card will let you gain a card from a place other than the Supply, but by default gained cards come
-		from the Supply.
-		* Sometimes a card will let you gain a card to a location other than your discard pile, but by default all gained
-		cards are put into your discard pile.
-		
-		"In play":
-		* Only played cards are in play; set aside cards, cards in the trash, in the Supply, in hands, etc., are not in
-		play.
 
-		"Play a card":
-		* When a card tells you to play a card, that does not use up an Action play for the turn.
-		* As always, played cards go into play, not directly into the discard pile.
+	Terminology
+	"Gain a card":
+	* Sometimes a card will let you gain a card from a place other than the Supply, but by default gained cards come from
+	the Supply.
+	* Sometimes a card will let you gain a card to a location other than your discard pile, but by default all gained
+	cards are put into your discard pile.
+	"In play":
+	* Only played cards are in play; set aside cards, cards in the trash, in the Supply, in hands, etc., are not in play.
+	"Play a card":
+	* When a card tells you to play a card, that does not use up an Action play for the turn.
+	* As always, played cards go into play, not directly into the discard pile.
+	"Set aside a card":
+	* Set aside cards are not "in play".
+	Shuffling
+	* If you have to do anything with your deck - for example draw, look at, reveal, set aside, discard, or trash cards -
+	and you need more cards than are left in your deck, first shuffle your discard pile and put it under your deck, then
+	do the thing. If there are still not enough cards, you do the thing with however many cards you can.
 
-		"Set aside a card":
-		* Set aside cards are not "in play".
-
-		Shuffling
-		* If you have to do anything with your deck - for example draw, look at, reveal, set aside, discard, or trash
-		cards - and you need more cards than are left in your deck, first shuffle your discard pile and put it under your
-		deck, then do the thing. If there are still not enough cards, you do the thing with however many cards you can.
-
-		Additional Rules
-		* When two things happen to different players at the same time, go in turn order starting with the player whose
-		turn it is. For example, when a player plays Witch, the other players gain Curses in turn order, which may matter
-		if the Curses run out.
-		* When two things happen to one player at the same time, that player picks the order to do them, even if some are
-		mandatory and some are not.
-		* When a card gives you a choice ("choose one..."), you can pick any option, without considering whether or not
-		you will be able to do it.
+	Additional Rules
+	* When two things happen to different players at the same time, go in turn order starting with the player whose turn
+	it is. For example, when a player plays Witch, the other players gain Curses in turn order, which may matter if the
+	Curses run out.
+	* When two things happen to one player at the same time, that player picks the order to do them, even if some are
+	mandatory and some are not.
+	* When a card gives you a choice ("choose one..."), you can pick any option, without considering whether or not you
+	will be able to do it.
 ]]

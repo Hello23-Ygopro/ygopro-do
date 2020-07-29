@@ -29,6 +29,5 @@ end
 	* A player can choose to gain a Curse even with no Curses left (and thus not gain one), or to discard 2 cards even
 	with one or zero cards in hand (discarding their only card if they have one).
 	* Gained Curses go to players' hands rather than their discard piles.
-
 	http://wiki.dominionstrategy.com/index.php/Torturer#FAQ
 ]]

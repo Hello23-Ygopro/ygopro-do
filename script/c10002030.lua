@@ -60,15 +60,14 @@ end
 	* First reveal a card from your hand, then count the types.
 	* Then choose one different thing per type the card had; if you revealed a card with two types, you pick two things.
 
-	http://wiki.dominionstrategy.com/index.php/Courtier#FAQ
-
 	Other Rules clarifications
 	* Revealing a card with four types gives you all bonuses.
 	* If you play Courtier and have no cards in hand, you get no bonus.
 	* If you play 2 Courtiers (or Throne Room a Courtier), you may reveal the same card the second time and choose the
 	same bonuses as before.
+	http://wiki.dominionstrategy.com/index.php/Courtier#FAQ
 
 	References
-		1. Inspector Boarder
-		https://github.com/Fluorohydride/ygopro-scripts/blob/a5d2769/c15397015.lua#L58
+	* Inspector Boarder
+	https://github.com/Fluorohydride/ygopro-scripts/blob/a5d2769/c15397015.lua#L58
 ]]

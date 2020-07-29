@@ -22,6 +22,5 @@ end
 	Official FAQ
 	* If you have only one card in hand, trash it and nothing else happens; if you have 2 or more cards in hand, trash
 	exactly 2 of them and gain a Silver, putting it into your hand.
-
 	http://wiki.dominionstrategy.com/index.php/Trading_Post#FAQ
 ]]

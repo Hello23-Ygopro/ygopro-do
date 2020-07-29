@@ -21,6 +21,6 @@ function scard.op1(e,tp,eg,ep,ev,re,r,rp)
 end
 --[[
 	References
-		1. Spellbook Library of the Heliosphere
-		https://github.com/Fluorohydride/ygopro-scripts/blob/6324c1c/c20822520.lua#L64
+	* Spellbook Library of the Heliosphere
+	https://github.com/Fluorohydride/ygopro-scripts/blob/6324c1c/c20822520.lua#L64
 ]]

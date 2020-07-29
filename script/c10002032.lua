@@ -32,6 +32,5 @@ end
 	Official FAQ
 	* It is possible to get both bonuses; if you gain Harem, Mill, or Nobles with Replace, it both goes on your deck and
 	causes the other players to each gain a Curse.
-
 	http://wiki.dominionstrategy.com/index.php/Replace#FAQ
 ]]

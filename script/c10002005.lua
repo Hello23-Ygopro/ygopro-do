@@ -32,6 +32,5 @@ end
 	* Masquerade's mechanism for changing card ownership is unique in the game, since it uses the word "pass" to indicate
 	a change of card ownership. The consequence of this wording is that the player receiving a passed card is not
 	"gaining" it. So, for example, they cannot react to the card passing with Watchtower.
-
 	http://wiki.dominionstrategy.com/index.php/Masquerade#FAQ
 ]]

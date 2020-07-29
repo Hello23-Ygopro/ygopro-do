@@ -38,8 +38,8 @@ end
 	Other Rules clarifications
 	* Where you put the card is public knowledge.
 	http://wiki.dominionstrategy.com/index.php/Secret Passage#FAQ
-	
+
 	References
-		1. Ancient Telescope
-		https://github.com/Fluorohydride/ygopro-scripts/blob/28cfc2d/c17092736.lua#L18
+	* Ancient Telescope
+	https://github.com/Fluorohydride/ygopro-scripts/blob/28cfc2d/c17092736.lua#L18
 ]]

@@ -55,10 +55,9 @@ end
 	* If you have to shuffle in the middle, shuffle. Don't shuffle in the revealed cards as these cards do not go to the
 	Discard pile until you have finished revealing cards.
 	* If you run out of cards after shuffling and still only have one Treasure, you get just that one Treasure.
-
 	http://wiki.dominionstrategy.com/index.php/Adventurer#FAQ
-	
+
 	References
-		1. Magical Merchant
-		https://github.com/Fluorohydride/ygopro-scripts/blob/cb54f7a/c32362575.lua#L10
+	* Magical Merchant
+	https://github.com/Fluorohydride/ygopro-scripts/blob/cb54f7a/c32362575.lua#L10
 ]]

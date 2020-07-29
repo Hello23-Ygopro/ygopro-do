@@ -20,6 +20,5 @@ end
 	Official FAQ
 	* You can choose to discard 2 cards even if you only have one card in hand, but you only get +$2 if you actually
 	discarded 2 cards.
-
 	http://wiki.dominionstrategy.com/index.php/Mill#FAQ
 ]]

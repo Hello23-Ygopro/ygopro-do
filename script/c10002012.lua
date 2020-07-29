@@ -43,6 +43,5 @@ end
 	this turn.
 	* When you play a Band of Misfits or an Overlord, you are playing two actions. The first action is the card itself,
 	then the action selected to imitate is the second action played.
-
 	http://wiki.dominionstrategy.com/index.php/Conspirator#FAQ
 ]]

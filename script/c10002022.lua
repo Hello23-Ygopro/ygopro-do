@@ -34,6 +34,5 @@ end
 
 	Other Rules clarifications.
 	* Revealing an Estate Inherited as a Crown would give you all three bonuses.
-
 	http://wiki.dominionstrategy.com/index.php/Tribute#FAQ
 ]]

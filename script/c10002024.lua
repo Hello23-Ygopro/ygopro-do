@@ -11,6 +11,5 @@ end
 
 	Official FAQ
 	* This can be played in your Buy phase like other Treasures, and is worth 2VP at the end of the game.
-
 	http://wiki.dominionstrategy.com/index.php/Harem#FAQ
 ]]

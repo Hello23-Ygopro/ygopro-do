@@ -27,6 +27,5 @@ end
 
 	Other Rules clarifications
 	* You must trash a card from your hand if you have one.
-
 	http://wiki.dominionstrategy.com/index.php/Remodel#FAQ
 ]]

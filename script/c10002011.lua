@@ -1,10 +1,10 @@
 --Bridge
 local scard,sid=aux.GetID()
 function scard.initial_effect(c)
-	--add buy, add coin, get effect
+	--add buy, add coin, gain effect
 	aux.AddActionEffect(c,scard.op1)
 end
---add buy, add coin, get effect
+--add buy, add coin, gain effect
 function scard.op1(e,tp,eg,ep,ev,re,r,rp)
 	Duel.AddBuy(tp,1)
 	Duel.AddCoin(tp,1)
@@ -26,10 +26,9 @@ end
 	* All cards, including cards in the Supply, in play, in decks, and in hands, cost $1 less for the rest of this turn,
 	but not less than $0.
 	* This is cumulative; if you play two Bridges (or the same Bridge twice via Throne Room), cards will cost $2 less.
-
 	http://wiki.dominionstrategy.com/index.php/Bridge#FAQ
 
 	References
-		1. Cost Down
-		https://github.com/Fluorohydride/ygopro-scripts/blob/2c4f0ca/c23265313.lua#L22
+	* Cost Down
+	https://github.com/Fluorohydride/ygopro-scripts/blob/2c4f0ca/c23265313.lua#L22
 ]]

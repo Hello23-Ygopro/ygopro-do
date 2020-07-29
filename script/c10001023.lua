@@ -27,6 +27,6 @@ function scard.op1(e,tp,eg,ep,ev,re,r,rp)
 end
 --[[
 	References
-		1. Chronomaly Technology
-		https://github.com/Fluorohydride/ygopro-scripts/blob/c04a9daa50/c90951921.lua#L54
+	* Chronomaly Technology
+	https://github.com/Fluorohydride/ygopro-scripts/blob/c04a9daa50/c90951921.lua#L54
 ]]

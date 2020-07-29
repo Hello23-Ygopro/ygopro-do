@@ -47,9 +47,8 @@ end
 
 	Other Rules clarifications
 	* If Pawn is Throne Roomed King's Courted, the choices do not have to be the same for each play of Pawn.
-
 	http://wiki.dominionstrategy.com/index.php/Pawn#FAQ
 
 	References
-		1. Primathmech Laplacian
+	* Primathmech Laplacian
 ]]

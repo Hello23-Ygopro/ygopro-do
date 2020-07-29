@@ -15,6 +15,5 @@ end
 
 	Official FAQ
 	* For example, if you have five Duchies, then each of your Dukes is worth 5VP.
-
 	http://wiki.dominionstrategy.com/index.php/Duke#FAQ
 ]]
