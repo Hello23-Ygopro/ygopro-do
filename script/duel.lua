@@ -141,6 +141,11 @@ function Duel.GetAllCards(player)
 	g:Sub(sg)
 	return g
 end
+--get the number of cards a player has
+function Duel.GetCardCount(player)
+	local g=Duel.GetAllCards(player)
+	return g:GetCount()
+end
 --get a player's counter holder (not available in the official game)
 --Note: returns Card if player~=nil, otherwise returns Group
 function Duel.GetCounterHolder(player)
@@ -263,10 +268,10 @@ function Duel.GainCards(targets,reason,player,dest_loc)
 			else
 				Duel.SendtoDPile(tc,reason,player)
 			end
-			--remove kingdom card status
-			tc:SetStatus(STATUS_KINGDOM,false)
 		end
 		res=res+1
+		--remove kingdom card status
+		tc:SetStatus(STATUS_KINGDOM,false)
 	end
 	return res
 end
@@ -286,6 +291,8 @@ function Duel.Trash(targets,reason,player)
 			tc:RemoveCounter(player,COUNTER_COPIES,1,REASON_RULE)
 		end
 		res=res+Duel.Remove(tc,POS_FACEUP,reason+REASON_TRASH,player)
+		--remove kingdom card status
+		tc:SetStatus(STATUS_KINGDOM,false)
 	end
 	return res
 end
@@ -301,11 +308,9 @@ function Duel.TrashDeck(player,count,reason)
 	if deck_count>0 and count>deck_count and g1:GetCount()==0 then count=deck_count end
 	--fix some cards sent to the wrong player's trash pile
 	if Duel.IsPlayerCanTrashDeck(player,count) then
-		for i=1,count do
-			local g2=Duel.GetDecktopGroup(player,1)
-			Duel.DisableShuffleCheck()
-			res=res+Duel.Trash(g2,reason,player)
-		end
+		local g2=Duel.GetDecktopGroup(player,count)
+		Duel.DisableShuffleCheck()
+		res=res+Duel.Trash(g2,reason,player)
 	end
 	return res
 end
@@ -313,10 +318,6 @@ end
 function Duel.IsPlayerCanTrashDeck(player,count)
 	local g=Duel.GetDecktopGroup(player,count)
 	return g:FilterCount(Card.IsAbleToTrash,nil)>0
-end
---get the number of cards a player has
-function Duel.GetCardCount(player)
-	return Duel.GetFieldGroupCount(player,LOCATION_HAND+LOCATION_DECK+LOCATION_DPILE+LOCATION_TRASH,0)
 end
 --play an action card
 function Duel.PlayAction(targets)
