@@ -234,6 +234,10 @@ function Auxiliary.SetDurationState(c)
 	c:RegisterEffect(e1)
 	return e1
 end
+--Remove Duration state
+function Auxiliary.RemoveDurationState(c)
+	c:ResetEffect(EFFECT_DONOT_CLEANUP,RESET_CODE)
+end
 
 --"Worth n VP"
 --e.g. "Duke" (2-017)

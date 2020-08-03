@@ -22,11 +22,10 @@ function scard.op1(e,tp,eg,ep,ev,re,r,rp)
 end
 --duration (to hand)
 function scard.op2(e,tp,eg,ep,ev,re,r,rp)
-	local c=e:GetHandler()
 	Duel.Hint(HINT_CARD,0,sid)
-	Duel.SendtoHand(c,tp,REASON_EFFECT)
+	Duel.SendtoHand(e:GetHandler(),tp,REASON_EFFECT)
 	--end duration
-	e:GetLabelObject():ResetEffect(EFFECT_DONOT_CLEANUP,RESET_CODE)
+	aux.RemoveDurationState(e:GetLabelObject())
 end
 --[[
 	FAQ

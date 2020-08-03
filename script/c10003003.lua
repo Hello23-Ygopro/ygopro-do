@@ -36,7 +36,7 @@ function scard.op2(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_CARD,0,sid)
 	Duel.AddCoin(tp,1)
 	--end duration
-	e:GetHandler():ResetEffect(EFFECT_DONOT_CLEANUP,RESET_CODE)
+	aux.RemoveDurationState(e:GetHandler())
 end
 --duration (immune)
 function scard.val1(e,te)

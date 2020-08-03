@@ -283,7 +283,6 @@ function Duel.GainCards(targets,reason,player,dest_loc)
 		else
 			if dest_loc==LOCATION_DECK then
 				Duel.SendtoDeck(tc,player,SEQ_DECK_TOP,reason)
-				Duel.ConfirmDecktop(player,1)
 			elseif dest_loc==LOCATION_HAND then
 				Duel.SendtoHand(tc,player,reason)
 				Duel.ConfirmCards(1-player,tc)

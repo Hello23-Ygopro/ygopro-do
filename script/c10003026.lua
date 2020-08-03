@@ -20,5 +20,5 @@ function scard.op2(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Draw(tp,2,REASON_EFFECT)
 	Duel.AddBuy(tp,1)
 	--end duration
-	e:GetHandler():ResetEffect(EFFECT_DONOT_CLEANUP,RESET_CODE)
+	aux.RemoveDurationState(e:GetHandler())
 end

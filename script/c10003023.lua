@@ -57,7 +57,7 @@ end
 --end duration
 function scard.op2(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_CARD,0,sid)
-	e:GetHandler():ResetEffect(EFFECT_DONOT_CLEANUP,RESET_CODE)
+	aux.RemoveDurationState(e:GetHandler())
 end
 --[[
 	FAQ

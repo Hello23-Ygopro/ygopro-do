@@ -9,9 +9,10 @@ function scard.op1(e,tp,eg,ep,ev,re,r,rp)
 	Duel.AddBuy(tp,1)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TRASH)
 	local g=Duel.SelectMatchingCard(tp,Card.IsAbleToTrash,tp,LOCATION_HAND,0,1,1,nil)
-	if g:GetCount()==0 or Duel.Trash(g,REASON_EFFECT,tp)==0 then return end
-	local tc=Duel.GetOperatedCard()
-	Duel.AddCoin(tp,tc:GetCost())
+	if g:GetCount()>0 and Duel.Trash(g,REASON_EFFECT,tp)>0 then
+		local tc=Duel.GetOperatedCard()
+		Duel.AddCoin(tp,tc:GetCost())
+	end
 end
 --[[
 	FAQ
