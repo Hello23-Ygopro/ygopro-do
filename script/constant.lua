@@ -786,6 +786,7 @@ HINTMSG_TOSUPPLY		=513	--Select a card to return to the Supply.
 ERROR_NOTARGETS			=1630	--There is no applicable card.
 ERROR_NOBONUSES			=1631	--You did not meet the requirements to gain a bonus.
 --Yes No Message (for Duel.SelectYesNo)
+YESNOMSG_USEEFFECT		=95		--Use the effect of [%ls]?
 YESNOMSG_DECKTODPILE	=600	--Put your deck into the discard pile?
 YESNOMSG_DISCARDDECK	=601	--Discard a card from the deck?
 YESNOMSG_GAINCARD		=602	--Gain a card?
