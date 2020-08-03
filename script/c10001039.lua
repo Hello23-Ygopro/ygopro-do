@@ -18,7 +18,6 @@ function scard.op1(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
 	local g2=Duel.SelectMatchingCard(tp,Card.IsAbleToDeck,tp,LOCATION_HAND,0,1,1,nil)
 	if g2:GetCount()>0 then
-		Duel.SendtoDeck(g2,tp,SEQ_DECK_SHUFFLE,REASON_EFFECT)
-		Duel.ShuffleDeck(tp)
+		Duel.SendtoDeck(g2,tp,SEQ_DECK_TOP,REASON_EFFECT)
 	end
 end

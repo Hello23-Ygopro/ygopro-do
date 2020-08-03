@@ -170,11 +170,13 @@ function Auxiliary.TreasureOperation(e,tp,eg,ep,ev,re,r,rp)
 		local tc=g:Select(tp,0,1,nil):GetFirst()
 		if not tc then break end
 		Duel.HintSelection(Group.FromCards(tc))
-		Duel.GainCards(tc,REASON_RULE,tp)
+		Duel.GainCards(tc,REASON_BUY,tp)
 		Duel.RemoveBuy(tp,1)
 		Duel.RemoveCoin(tp,tc:GetCost())
 		coin=Duel.GetCoins(tp)
 		g=g:Filter(Auxiliary.SupplyFilter(Auxiliary.TreasureFilter),nil,coin)
+		--raise event for buying cards
+		Duel.RaiseEvent(tc,EVENT_CUSTOM+EVENT_BUY,e,0,tp,0,0)
 	end
 end
 
@@ -208,6 +210,31 @@ function Auxiliary.AddReactionEffect(c,op_func,con_func)
 	c:RegisterEffect(e1)
 	return e1
 end
+--Duration effects
+--e.g. "Haven" (3-002)
+function Auxiliary.AddDurationEffect(c,tc,con_func,op_func)
+	--Note: Using EVENT_PHASE+PHASE_ACTION instead of EVENT_TURN_START causes YGOPro to crash
+	local e1=Effect.CreateEffect(c)
+	e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+	e1:SetCode(EVENT_TURN_START)
+	e1:SetRange(LOCATION_INPLAY)
+	e1:SetCountLimit(1)
+	e1:SetLabel(Duel.GetTurnCount())
+	e1:SetCondition(con_func)
+	e1:SetOperation(op_func)
+	tc:RegisterEffect(e1)
+	return e1
+end
+--Set Duration state - do not clean up
+function Auxiliary.SetDurationState(c)
+	local e1=Effect.CreateEffect(c)
+	e1:SetType(EFFECT_TYPE_SINGLE)
+	e1:SetCode(EFFECT_DONOT_CLEANUP)
+	e1:SetReset(RESET_EVENT+RESETS_STANDARD)
+	c:RegisterEffect(e1)
+	return e1
+end
+
 --"Worth n VP"
 --e.g. "Duke" (2-017)
 function Auxiliary.AddChangeVP(c,val)
@@ -223,6 +250,10 @@ end
 --e.g. "Secret Chamber" (2-003)
 function Auxiliary.ReactionCondition(e,tp,eg,ep,ev,re,r,rp)
 	return rp==1-tp and re:IsActiveType(TYPE_ATTACK)
+end
+--condition for Duration effects
+function Auxiliary.DurationCondition(e,tp,eg,ep,ev,re,r,rp)
+	return Duel.GetTurnPlayer()==tp and Duel.GetTurnCount()~=e:GetLabel()
 end
 --filter for a card in the supply
 function Auxiliary.SupplyFilter(f)

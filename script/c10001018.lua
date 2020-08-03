@@ -8,7 +8,7 @@ end
 function scard.op1(e,tp,eg,ep,ev,re,r,rp)
 	Duel.AddCoin(tp,2)
 	local ct=Duel.GetFieldGroupCount(tp,0,LOCATION_HAND)
-	if ct>3 then
+	if ct>=4 then
 		Duel.DiscardHand(1-tp,aux.TRUE,ct-3,ct-3,REASON_EFFECT+REASON_DISCARD)
 	end
 end

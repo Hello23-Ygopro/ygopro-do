@@ -49,6 +49,7 @@ Take all of your cards - from your hand, deck, discard pile, play area, and even
 - `0x81	Monster+Ritual` = Curse
 - `0x100	Trap Monster` = [Attack](http://wiki.dominionstrategy.com/index.php/Attack)
 - `0x200	Spirit` = [Reaction](http://wiki.dominionstrategy.com/index.php/Reaction)
+- `0x400	Union` = [Duration](http://wiki.dominionstrategy.com/index.php/Duration)
 	- `Level` = Cost
 </details>
 <details>
@@ -63,13 +64,12 @@ Take all of your cards - from your hand, deck, discard pile, play area, and even
 <details>
 <summary>Phase</summary>
 
-1. `EVENT_PREDRAW` = ～Reserved～
-2. `PHASE_DRAW` = Action phase (A)
-3. `PHASE_STANDBY` = Buy phase (B)
-4. `PHASE_MAIN1` = Clean-up phase (C)
-5. `PHASE_BATTLE` = ～Reserved～
-6. `PHASE_MAIN2` = ～Reserved～
-7. `PHASE_END` = ～Reserved～
+1. `PHASE_DRAW` = Action phase (A)
+2. `PHASE_STANDBY` = Buy phase (B)
+3. `PHASE_MAIN1` = Clean-up phase (C)
+4. `PHASE_BATTLE` = ～Reserved～
+5. `PHASE_MAIN2` = ～Reserved～
+6. `PHASE_END` = ～Reserved～
 </details>
 <details>
 <summary>Category</summary>

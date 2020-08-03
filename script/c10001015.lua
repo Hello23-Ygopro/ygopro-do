@@ -21,8 +21,7 @@ function scard.op1(e,tp,eg,ep,ev,re,r,rp)
 	local sg=g2:FilterSelect(1-tp,scard.tdfilter,1,1,nil)
 	if sg:GetCount()>0 then
 		Duel.ConfirmCards(tp,sg)
-		Duel.SendtoDeck(sg,1-tp,SEQ_DECK_SHUFFLE,REASON_EFFECT)
-		Duel.ShuffleDeck(1-tp)
+		Duel.SendtoDeck(sg,1-tp,SEQ_DECK_TOP,REASON_EFFECT)
 	else
 		Duel.ConfirmCards(tp,g2)
 	end

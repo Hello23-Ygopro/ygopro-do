@@ -13,6 +13,8 @@ CARD_DUCHY			=10001005	--Duchy
 CARD_GOLD			=10001006	--Gold
 CARD_PROVINCE		=10001007	--Province
 CARD_VASSAL			=10001035	--EVENT_CUSTOM+EVENT_PLAY_ACTION
+CARD_EMBARGO		=10003001	--EVENT_CUSTOM+EVENT_BUY
+CARD_SMUGGLERS		=10003009	--EVENT_CUSTOM+EVENT_GAIN
 --Location
 LOCATION_ALL		=0xff		--All locations
 LOCATION_DECK		=0x01		--Deck
@@ -71,7 +73,7 @@ TYPE_FUSION			=0x40		--(unused)
 TYPE_CURSE			=0x80		--Curse
 TYPE_ATTACK			=0x100		--Attack
 TYPE_REACTION		=0x200		--Reaction
-TYPE_UNION			=0x400		--(unused)
+TYPE_DURATION		=0x400		--Duration
 TYPE_DUAL			=0x800		--(unused)
 TYPE_TUNER			=0x1000		--(unused)
 TYPE_SYNCHRO		=0x2000		--(unused)
@@ -130,7 +132,7 @@ REASON_RELEASE		=0x2		--(unused)
 REASON_TEMPORARY	=0x4		--(unused)
 REASON_MATERIAL		=0x8		--(unused)
 REASON_SUMMON		=0x10		--(unused)
-REASON_BATTLE		=0x20		--(unused)
+REASON_BUY			=0x20		--Bought a card
 REASON_EFFECT		=0x40		--Effect
 REASON_COST			=0x80		--(unused) Cost
 REASON_ADJUST		=0x100		--(unused)
@@ -241,6 +243,8 @@ COUNTER_COPIES				=0x1001	--This represents how many cards exist in a pile
 COUNTER_ACTIONS				=0x1002	--This represents the amount of Actions a player has
 COUNTER_BUYS				=0x1003	--This represents the amount of Buys a player has
 COUNTER_COINS				=0x1004	--This represents the amount of Coins a player has
+COUNTER_EMBARGO_TOKEN		=0x1005	--This represents Embargo token
+COUNTER_COIN_TOKEN			=0x1006	--This represents Coin token
 --Phase
 PHASE_ACTION		=0x01	--Action phase
 PHASE_BUY			=0x02	--Buy phase
@@ -511,7 +515,7 @@ EFFECT_SKIP_M2						=184	--(unused) Skip Main Phase 2
 EFFECT_CANNOT_BP					=185	--Cannot conduct Battle Phase
 EFFECT_CANNOT_M2					=186	--Cannot conduct Main Phase 2
 EFFECT_CANNOT_EP					=187	--Cannot conduct End Phase
-EFFECT_SKIP_TURN					=188	--(unused)
+EFFECT_SKIP_TURN					=188	--Skip the entire turn
 EFFECT_DEFENSE_ATTACK				=190	--(unused)
 EFFECT_MUST_ATTACK					=191	--(unused)
 EFFECT_FIRST_ATTACK					=192	--(unused)
@@ -642,6 +646,9 @@ EFFECT_UPDATE_COPPER_PRODUCE		=602	--Increase/decrease the amount of coin Copper
 EFFECT_UPDATE_SILVER_PRODUCE		=603	--(reserved) Increase/decrease the amount of coin Silver produces
 EFFECT_UPDATE_GOLD_PRODUCE			=604	--(reserved) Increase/decrease the amount of coin Gold produces
 EFFECT_UPDATE_PLATINUM_PRODUCE		=605	--(reserved) Increase/decrease the amount of coin Platinum produces
+EFFECT_EMBARGO						=610	--The player who buys a card with this effect gains a Curse ("Embargo" 3-001)
+EFFECT_DONOT_CLEANUP				=611	--Do not clean up (Duration card)
+EFFECT_CHANGE_DRAW_COUNT			=612	--Change default draw count ("Outpost" 3-023, do not use EFFECT_DRAW_COUNT)
 --Event Code
 --Events that can be used as a trigger for Trigger Effects
 EVENT_STARTUP					=1000	--(unused)
@@ -651,7 +658,7 @@ EVENT_DESTROY					=1010	--(unused)
 EVENT_REMOVE					=1011	--(unused)
 EVENT_TO_HAND					=1012	--(unused)
 EVENT_TO_DECK					=1013	--(unused)
-EVENT_TO_GRAVE					=1014	--(unused)
+EVENT_TO_DPILE					=1014	--When a card is put into the discard pile
 EVENT_LEAVE_FIELD				=1015	--(unused)
 EVENT_CHANGE_POS				=1016	--(unused)
 EVENT_RELEASE					=1017	--(unused)
@@ -682,7 +689,7 @@ EVENT_BE_PRE_MATERIAL			=1109	--(unused)
 EVENT_DRAW						=1110	--(unused)
 EVENT_DAMAGE					=1111	--(unused)
 EVENT_RECOVER					=1112	--(unused)
-EVENT_PREDRAW					=1113	--(unused)
+EVENT_TURN_START				=1113	--At the start of the turn
 EVENT_SUMMON_NEGATED			=1114	--(unused, not available in YGOPro Percy)
 EVENT_FLIP_SUMMON_NEGATED		=1115	--(unused, not available in YGOPro Percy)
 EVENT_SPSUMMON_NEGATED			=1116	--(unused, not available in YGOPro Percy)
@@ -718,6 +725,8 @@ EVENT_REMOVE_COUNTER			=0x20000	--(unused, combined with counter ID)
 EVENT_CUSTOM					=0x10000000	--Custom event
 --The following is only available in YGOPro DO
 EVENT_PLAY_ACTION				=CARD_VASSAL	--Play an Action card
+EVENT_BUY						=CARD_EMBARGO	--When a player buys a card
+EVENT_GAIN						=CARD_SMUGGLERS	--When a player gains a card
 --Effect Category
 --Hint
 --Message displayed in the center of the screen
@@ -768,8 +777,11 @@ HINTMSG_PLAYTWICE		=505	--Select a card to play twice.
 HINTMSG_CHOOSESET		=506	--Play with which set?
 HINTMSG_PASS			=507	--Select a card to pass to your opponent.
 HINTMSG_ANNOUNCENAME	=508	--Name a card.
-HINTMSG_ANNOUNCESEQ		=509	--Put where in the deck?
+HINTMSG_ANNOUNCESEQ		=509	--Put a card where in the deck?
 HINTMSG_CONFIRM			=510	--Select a card to show your opponent.
+HINTMSG_ADDTOKEN		=511	--Select a card to add a token to.
+HINTMSG_SET				=512	--Select a card to set aside.
+HINTMSG_TOSUPPLY		=513	--Select a card to return to the Supply.
 --Information displayed in a dialog box
 ERROR_NOTARGETS			=1630	--There is no applicable card.
 ERROR_NOBONUSES			=1631	--You did not meet the requirements to gain a bonus.
@@ -780,9 +792,11 @@ YESNOMSG_GAINCARD		=602	--Gain a card?
 YESNOMSG_PLAY			=603	--Play a card?
 YESNOMSG_TRASH			=604	--Trash a card?
 YESNOMSG_DISCARDHAND	=605	--Discard a card?
+YESNOMSG_TODECKTOP		=606	--Put a card on top of the deck?
+YESNOMSG_CONFIRMHAND	=607	--Show a card to your opponent?
 YESNOMSG_USEPROMO		=700	--(reserved) Use promotional cards?
-YESNOMSG_USEBASE		=701	--Use cards from Base?
-YESNOMSG_USEINTRIGUE	=702	--Use cards from Intrigue?
+YESNOMSG_USEBASE		=701	--(reserved) Use cards from Base?
+YESNOMSG_USEINTRIGUE	=702	--(reserved) Use cards from Intrigue?
 YESNOMSG_USESEASIDE		=703	--(reserved) Use cards from Seaside?
 YESNOMSG_USEALCHEMY		=704	--(reserved) Use cards from Alchemy?
 YESNOMSG_USEPROSPERITY	=705	--(reserved) Use cards from Prosperity?
@@ -819,6 +833,7 @@ OPTION_MENAGERIE		=1664	--(reserved) Menagerie
 --Description (for SetDescription, EFFECT_FLAG_CLIENT_HINT)
 DESC_PLAY_TWICE			=300	--May be played twice
 DESC_MORE_COPPER		=400	--Copper produces more $
+DESC_IMMUNE_ATTACK		=401	--Unaffected by Attack cards
 --Timing
 --Free Chain activation timing
 TIMING_ACTION_PHASE			=0x1		--Action phase

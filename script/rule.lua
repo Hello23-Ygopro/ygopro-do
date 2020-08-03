@@ -148,8 +148,8 @@ kingdom_card_list["Intrigue"]={
 	10002031,10002032
 }
 kingdom_card_list["Seaside"]={
-	10003001,10003002,10003003,10003004,10003005,10003006,10003007,10003008,10003009,10003010,
-	10003011,10003012,10003013,10003014,10003015,10003016,10003017,10003018,10003019,10003020,
+	10003001,10003002,--[[10003003,]]--[[10003004,]]10003005,10003006,10003007,10003008,10003009,10003010,
+	10003011,10003012,--[[10003013,]]10003014,--[[10003015,]]10003016,10003017,10003018,10003019,10003020,
 	10003021,10003022,10003023,10003024,10003025,10003026
 }
 kingdom_card_list["Alchemy"]={
@@ -222,8 +222,8 @@ kingdom_card_list["Renaissance"]={
 function Rule.setup_kingdom_cards()
 	--choose a card set
 	local card_list={}
-	local sel_list={0x1,0x2}
-	local option_list={OPTION_BASE,OPTION_INTRIGUE}
+	local sel_list={0x1,0x2,0x4}
+	local option_list={OPTION_BASE,OPTION_INTRIGUE,OPTION_SEASIDE}
 	Duel.Hint(HINT_SELECTMSG,PLAYER_ONE,HINTMSG_CHOOSESET)
 	local opt=Duel.SelectOption(PLAYER_ONE,table.unpack(option_list))+1
 	local sel=sel_list[opt]
@@ -232,6 +232,9 @@ function Rule.setup_kingdom_cards()
 	end
 	if bit.band(sel,0x2)~=0 then
 		card_list=kingdom_card_list["Intrigue"]
+	end
+	if bit.band(sel,0x4)~=0 then
+		card_list=kingdom_card_list["Seaside"]
 	end
 	--add cards to the game
 	for i=1,10 do
@@ -349,11 +352,11 @@ end
 --clean-up phase
 function Rule.CleanupOperation(e,tp,eg,ep,ev,re,r,rp)
 	local turnp=Duel.GetTurnPlayer()
-	local g1=Duel.GetMatchingGroup(aux.InPlayFilter(Card.IsAbleToDPile),turnp,LOCATION_INPLAY,0,nil)
-	local g2=Duel.GetMatchingGroup(Card.IsAbleToDPile,turnp,LOCATION_HAND,0,nil)
+	local g1=Duel.GetMatchingGroup(aux.InPlayFilter(Card.IsCanBeCleanedUp),turnp,LOCATION_INPLAY,0,nil)
+	local g2=Duel.GetMatchingGroup(Card.IsCanBeCleanedUp,turnp,LOCATION_HAND,0,nil)
 	g1:Merge(g2)
 	Duel.SendtoDPile(g1,REASON_RULE,turnp)
-	Duel.Draw(turnp,5,REASON_RULE)
+	Duel.Draw(turnp,Duel.GetDrawCount(turnp),REASON_RULE)
 	Duel.EndTurn()
 end
 --show score

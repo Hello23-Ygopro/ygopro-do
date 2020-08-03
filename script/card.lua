@@ -69,6 +69,10 @@ function Card.GetTypeCount(c)
 	end
 	return res
 end
+--check if a card can be cleaned up
+function Card.IsCanBeCleanedUp(c)
+	return not c:IsHasEffect(EFFECT_DONOT_CLEANUP)
+end
 --Renamed Card functions
 --get a card's original cost
 Card.GetOriginalCost=Card.GetOriginalLevel
@@ -76,3 +80,5 @@ Card.GetOriginalCost=Card.GetOriginalLevel
 Card.IsAbleToDPile=Card.IsAbleToGrave
 --check if a card can be trashed
 Card.IsAbleToTrash=Card.IsAbleToRemove
+--check if a card can be set aside
+Card.IsAbleToSetAside=Card.IsAbleToRemove

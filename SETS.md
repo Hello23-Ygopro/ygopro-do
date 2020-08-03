@@ -9,7 +9,7 @@
 ## Sets
 - ~**October, 2008** : [Base Set](http://wiki.dominionstrategy.com/index.php/Dominion_(Base_Set)) : `10001XXX`~
 - ~**July, 2009** : [Intrigue](http://wiki.dominionstrategy.com/index.php/Intrigue) : `10002XXX`~
-- **October, 2009** : [Seaside](http://wiki.dominionstrategy.com/index.php/Seaside) : `10003XXX`
+- ~**October, 2009** : [Seaside](http://wiki.dominionstrategy.com/index.php/Seaside) : `10003XXX`~
 - **May, 2010** : [Alchemy](http://wiki.dominionstrategy.com/index.php/Alchemy) : `10004XXX`
 - **October, 2010** : [Prosperity](http://wiki.dominionstrategy.com/index.php/Prosperity) : `10005XXX`
 - **June, 2011** : [Cornucopia](http://wiki.dominionstrategy.com/index.php/Cornucopia) : `10006XXX`

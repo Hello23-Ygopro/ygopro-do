@@ -16,7 +16,6 @@ function scard.op1(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
 	local sg=g:Select(tp,1,1,nil)
 	Duel.SendtoDeck(sg,tp,opt,REASON_EFFECT)
-	if opt==OPTION_DECKSHF then Duel.ShuffleDeck(tp) end
 	--[[
 	local ct=Duel.GetFieldGroupCount(tp,LOCATION_DECK,0)
 	local t={}
