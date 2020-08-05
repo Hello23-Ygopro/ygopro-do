@@ -65,17 +65,6 @@ function Duel.DiscardDeck(player,count,reason)
 	end
 	return res
 end
---get the first card that is in a specified location
---Note: Overwritten to notify a player if there are no cards
-local duel_get_first_matching_card=Duel.GetFirstMatchingCard
-function Duel.GetFirstMatchingCard(f,player,s,o,ex,...)
-	if not Duel.IsExistingMatchingCard(f,player,s,o,1,ex,...) then
-		Duel.Hint(HINT_MESSAGE,player,ERROR_NOTARGETS)
-		--fix error if a card does not exist
-		return Group.CreateGroup()
-	end
-	return duel_get_first_matching_card(f,player,s,o,ex,...)
-end
 --select a card
 --Note: Overwritten to notify a player if there are no cards to select
 local duel_select_matching_card=Duel.SelectMatchingCard
@@ -288,6 +277,7 @@ function Duel.GainCards(targets,reason,player,dest_loc)
 	--dest_loc: where to put the gained card (discard pile by default)
 	if type(targets)=="Card" then targets=Group.FromCards(targets) end
 	local res=0
+	if not targets then return res end
 	for tc in aux.Next(targets) do
 		if tc:GetCounter(COUNTER_COPIES)>1 then
 			local card=Duel.CreateCard(player,tc:GetCode())
