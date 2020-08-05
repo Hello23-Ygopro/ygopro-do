@@ -15,9 +15,11 @@ function scard.op1(e,tp,eg,ep,ev,re,r,rp)
 	Duel.ConfirmDecktop(tp,4)
 	local g=Duel.GetDecktopGroup(tp,4)
 	local sg=g:Filter(scard.thfilter,nil)
-	Duel.DisableShuffleCheck()
-	Duel.SendtoHand(sg,tp,REASON_EFFECT)
-	Duel.ConfirmCards(1-tp,sg)
-	Duel.ShuffleHand(tp)
+	if sg:GetCount()>0 then
+		Duel.DisableShuffleCheck()
+		Duel.SendtoHand(sg,tp,REASON_EFFECT)
+		Duel.ConfirmCards(1-tp,sg)
+		Duel.ShuffleHand(tp)
+	end
 	Duel.SortDecktop(tp,tp,g:GetCount())
 end

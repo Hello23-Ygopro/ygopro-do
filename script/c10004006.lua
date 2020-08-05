@@ -35,7 +35,6 @@ function scard.op1(e,tp,eg,ep,ev,re,r,rp)
 	if g1:GetCount()==0 then
 		Duel.ConfirmDecktop(tp,deck_count)
 		Duel.Hint(HINT_MESSAGE,tp,ERROR_NOTARGETS)
-		return
 	else
 		local seq=-1
 		for tc in aux.Next(g1) do
