@@ -17,15 +17,15 @@ function scard.op1(e,tp,eg,ep,ev,re,r,rp)
 	local e1=aux.AddDurationEffect(c,tc,aux.DurationCondition,scard.op2)
 	e1:SetLabelObject(c)
 	e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_ACTION,2)
-	aux.SetDurationState(c)
-	aux.SetDurationState(tc)
+	aux.SetDurationState(c,true)
+	aux.SetDurationState(tc,true)
 end
 --duration (to hand)
 function scard.op2(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_CARD,0,sid)
 	Duel.SendtoHand(e:GetHandler(),tp,REASON_EFFECT)
 	--end duration
-	aux.RemoveDurationState(e:GetLabelObject())
+	aux.SetDurationState(e:GetLabelObject(),false)
 end
 --[[
 	FAQ

@@ -12,12 +12,12 @@ function scard.op1(e,tp,eg,ep,ev,re,r,rp)
 	--duration (draw)
 	local e1=aux.AddDurationEffect(c,c,aux.DurationCondition,scard.op2)
 	e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_DISABLE+RESET_PHASE+PHASE_ACTION,3)
-	aux.SetDurationState(c)
+	aux.SetDurationState(c,true)
 end
 --duration (draw)
 function scard.op2(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_CARD,0,sid)
 	Duel.Draw(tp,1,REASON_EFFECT)
 	--end duration
-	aux.RemoveDurationState(e:GetHandler())
+	aux.SetDurationState(e:GetHandler(),false)
 end

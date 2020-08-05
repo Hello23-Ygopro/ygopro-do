@@ -29,14 +29,14 @@ function scard.op1(e,tp,eg,ep,ev,re,r,rp)
 	e3:SetTargetRange(1,0)
 	e3:SetReset(RESET_PHASE+PHASE_ACTION,2)
 	Duel.RegisterEffect(e3,tp)
-	aux.SetDurationState(c)
+	aux.SetDurationState(c,true)
 end
 --duration (add coin)
 function scard.op2(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_CARD,0,sid)
 	Duel.AddCoin(tp,1)
 	--end duration
-	aux.RemoveDurationState(e:GetHandler())
+	aux.SetDurationState(e:GetHandler(),false)
 end
 --duration (immune)
 function scard.val1(e,te)

@@ -226,17 +226,18 @@ function Auxiliary.AddDurationEffect(c,tc,con_func,op_func)
 	return e1
 end
 --Set Duration state - do not clean up
-function Auxiliary.SetDurationState(c)
-	local e1=Effect.CreateEffect(c)
-	e1:SetType(EFFECT_TYPE_SINGLE)
-	e1:SetCode(EFFECT_DONOT_CLEANUP)
-	e1:SetReset(RESET_EVENT+RESETS_STANDARD)
-	c:RegisterEffect(e1)
-	return e1
-end
---Remove Duration state
-function Auxiliary.RemoveDurationState(c)
-	c:ResetEffect(EFFECT_DONOT_CLEANUP,RESET_CODE)
+function Auxiliary.SetDurationState(c,enable)
+	--enable: true to enable, false to disable
+	if enable==true then
+		local e1=Effect.CreateEffect(c)
+		e1:SetType(EFFECT_TYPE_SINGLE)
+		e1:SetCode(EFFECT_DONOT_CLEANUP)
+		e1:SetReset(RESET_EVENT+RESETS_STANDARD)
+		c:RegisterEffect(e1)
+		return e1
+	elseif enable==false then
+		c:ResetEffect(EFFECT_DONOT_CLEANUP,RESET_CODE)
+	end
 end
 
 --"Worth n VP"

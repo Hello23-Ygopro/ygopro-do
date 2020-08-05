@@ -51,13 +51,13 @@ function scard.op1(e,tp,eg,ep,ev,re,r,rp)
 		e3:SetOperation(scard.op2)
 		e3:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_DISABLE+RESET_PHASE+PHASE_ACTION,3)
 		c:RegisterEffect(e3)
-		aux.SetDurationState(c)
+		aux.SetDurationState(c,true)
 	end
 end
 --end duration
 function scard.op2(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_CARD,0,sid)
-	aux.RemoveDurationState(e:GetHandler())
+	aux.SetDurationState(e:GetHandler(),false)
 end
 --[[
 	FAQ
