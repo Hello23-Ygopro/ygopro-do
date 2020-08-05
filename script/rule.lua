@@ -90,6 +90,8 @@ function Rule.ApplyRules(e,tp,eg,ep,ev,re,r,rp)
 	e9:SetOperation(Rule.EndGameOperation)
 	Duel.RegisterEffect(e9,0)
 	--override yugioh rules
+	--set level status
+	Rule.set_level_status()
 	--cannot draw
 	Rule.cannot_draw()
 	--cannot summon
@@ -155,7 +157,7 @@ kingdom_card_list["Seaside"]={
 kingdom_card_list["Alchemy"]={
 	--excluded basic cards: 10004001 (Potion)
 	10004002,10004003,10004004,10004005,10004006,10004007,10004008,10004009,10004010,10004011,
-	10004012,10004013
+	10004012,--10004013
 }
 kingdom_card_list["Prosperity"]={
 	--excluded basic cards: 10005001-10005002 (Platinum, Colony)
@@ -222,8 +224,8 @@ kingdom_card_list["Renaissance"]={
 function Rule.setup_kingdom_cards()
 	--choose a card set
 	local card_list={}
-	local sel_list={0x1,0x2,0x4}
-	local option_list={OPTION_BASE,OPTION_INTRIGUE,OPTION_SEASIDE}
+	local sel_list={0x1,0x2,0x4,0x8}
+	local option_list={OPTION_BASE,OPTION_INTRIGUE,OPTION_SEASIDE,OPTION_ALCHEMY}
 	Duel.Hint(HINT_SELECTMSG,PLAYER_ONE,HINTMSG_CHOOSESET)
 	local opt=Duel.SelectOption(PLAYER_ONE,table.unpack(option_list))+1
 	local sel=sel_list[opt]
@@ -235,6 +237,9 @@ function Rule.setup_kingdom_cards()
 	end
 	if bit.band(sel,0x4)~=0 then
 		card_list=kingdom_card_list["Seaside"]
+	end
+	if bit.band(sel,0x8)~=0 then
+		card_list=kingdom_card_list["Alchemy"]
 	end
 	--add cards to the game
 	for i=1,10 do
@@ -258,6 +263,11 @@ function Rule.setup_kingdom_cards()
 			szone=szone+szone
 		end
 		mzone=mzone+mzone
+	end
+	--add potion to the game
+	if bit.band(sel,0x8)~=0 then
+		local card=Duel.CreateCard(PLAYER_TWO,CARD_POTION)
+		Duel.MoveToField(card,PLAYER_ONE,PLAYER_TWO,LOCATION_MZONE,POS_FACEUP_ATTACK,true,ZONE_POTION)
 	end
 end
 --set up base cards
@@ -286,6 +296,7 @@ function Rule.add_copies()
 			if c:IsCode(CARD_COPPER) then c:AddCounter(COUNTER_COPIES,46)
 			elseif c:IsCode(CARD_SILVER) then c:AddCounter(COUNTER_COPIES,40)
 			elseif c:IsCode(CARD_GOLD) then c:AddCounter(COUNTER_COPIES,30)
+			elseif c:IsCode(CARD_POTION) then c:AddCounter(COUNTER_COPIES,16)
 			elseif c:IsStatus(STATUS_KINGDOM) or c:IsType(TYPE_CURSE) then c:AddCounter(COUNTER_COPIES,10) end
 		end
 	end
@@ -296,6 +307,9 @@ function Rule.StartTurnOperation(e,tp,eg,ep,ev,re,r,rp)
 	Duel.AddAction(turnp,1)
 	Duel.AddBuy(turnp,1)
 	Duel.AddCoin(turnp,0)
+	if Duel.CheckPotionRules() then
+		Duel.AddPotion(turnp,0)
+	end
 end
 --put in play
 function Rule.PutInPlayOperation(e,tp,eg,ep,ev,re,r,rp)
@@ -310,6 +324,7 @@ function Rule.PutInPlayOperation(e,tp,eg,ep,ev,re,r,rp)
 		local g=Duel.GetMatchingGroup(Card.IsType,cp,LOCATION_HAND,0,nil,TYPE_TREASURE)
 		Duel.SendtoInPlay(g,REASON_RULE)
 		local coin=g:GetSum(Card.GetCoin)
+		local potion=g:GetSum(Card.GetPotion)
 		--check for "Copper produces an extra $1 this turn" ("Coppersmith" 2-013)
 		local ct=g:FilterCount(Card.IsCode,nil,CARD_COPPER)
 		if ct>0 then
@@ -322,7 +337,8 @@ function Rule.PutInPlayOperation(e,tp,eg,ep,ev,re,r,rp)
 				end
 			end
 		end
-		Duel.AddCoin(cp,coin)
+		if coin>0 then Duel.AddCoin(cp,coin) end
+		if potion>0 then Duel.AddPotion(cp,potion) end
 	end
 end
 --limit actions
@@ -350,12 +366,19 @@ function Rule.LimitBuy(e,re,tp)
 	return re:IsHasProperty(EFFECT_FLAG_PLAY_PARAM) and rc:IsType(TYPE_TREASURE)
 end
 --clean-up phase
+function Rule.CleanupFilter(c)
+	return c:IsType(TYPE_ACTION) and c:IsCanBeCleanedUp()
+end
 function Rule.CleanupOperation(e,tp,eg,ep,ev,re,r,rp)
 	local turnp=Duel.GetTurnPlayer()
-	local g1=Duel.GetMatchingGroup(aux.InPlayFilter(Card.IsCanBeCleanedUp),turnp,LOCATION_INPLAY,0,nil)
-	local g2=Duel.GetMatchingGroup(Card.IsCanBeCleanedUp,turnp,LOCATION_HAND,0,nil)
+	local g1=Duel.GetMatchingGroup(aux.InPlayFilter(Rule.CleanupFilter),turnp,LOCATION_INPLAY,0,nil)
+	local g2=Duel.GetMatchingGroup(Rule.CleanupFilter,turnp,LOCATION_HAND,0,nil)
 	g1:Merge(g2)
 	Duel.SendtoDPile(g1,REASON_RULE,turnp)
+	local g3=Duel.GetMatchingGroup(Card.IsCanBeCleanedUp,turnp,LOCATION_INPLAY,0,nil)
+	local g4=Duel.GetMatchingGroup(Card.IsCanBeCleanedUp,turnp,LOCATION_HAND,0,nil)
+	g3:Merge(g4)
+	Duel.SendtoDPile(g3,REASON_RULE,turnp)
 	Duel.Draw(turnp,Duel.GetDrawCount(turnp),REASON_RULE)
 	Duel.EndTurn()
 end
@@ -397,6 +420,30 @@ function Rule.EndGameOperation(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 --override yugioh rules
+--set level status
+function Rule.set_level_status()
+	local e1=Effect.GlobalEffect()
+	e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+	e1:SetCode(EVENT_ADJUST)
+	e1:SetOperation(Rule.SetLevelStatusOp)
+	Duel.RegisterEffect(e1,0)
+end
+function Rule.EnableLevelStatusFilter(c)
+	return not c:IsStatus(STATUS_NO_COST) and c:GetCost()==0
+end
+function Rule.DisableLevelStatusFilter(c)
+	return c:IsStatus(STATUS_NO_COST) and c:GetCost()>0
+end
+function Rule.SetLevelStatusOp(e,tp,eg,ep,ev,re,r,rp)
+	local g1=Duel.GetMatchingGroup(Rule.EnableLevelStatusFilter,0,LOCATION_ALL,LOCATION_ALL,nil)
+	for c1 in aux.Next(g1) do
+		c1:SetStatus(STATUS_NO_COST,true)
+	end
+	local g2=Duel.GetMatchingGroup(Rule.DisableLevelStatusFilter,0,LOCATION_ALL,LOCATION_ALL,nil)
+	for c2 in aux.Next(g2) do
+		c2:SetStatus(STATUS_NO_COST,false)
+	end
+end
 --cannot draw
 function Rule.cannot_draw()
 	local e1=Effect.GlobalEffect()

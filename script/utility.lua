@@ -115,29 +115,30 @@ function Auxiliary.GetID()
 	return scard,sid
 end
 
---add coin value to a card
+--register the coin a card is worth
 function Auxiliary.AddCoin(c,val)
-	local res=val
 	local mt=getmetatable(c)
-	mt.coin=res
+	mt.coin=val
 end
---add vp value to a card
+--register the vp a card is worth
 function Auxiliary.AddVP(c,val)
-	local res=val
-	local t={c:IsHasEffect(EFFECT_CHANGE_VP)}
-	for _,te in pairs(t) do
-		if type(te:GetValue())=="function" then
-			res=res+te:GetValue()(te,c)
-		else
-			res=res+te:GetValue()
-		end
-	end
 	local mt=getmetatable(c)
-	mt.vp=res
+	mt.vp=val
 end
+--register the potion a card is worth
+function Auxiliary.AddPotion(c,val)
+	local mt=getmetatable(c)
+	mt.potion=val
+end
+--register a card's potion cost
+function Auxiliary.AddPotionCost(c,val)
+	local mt=getmetatable(c)
+	mt.potion_cost=val
+end
+
 --list of all card types in the game
 --Note: Update this list if a new card type is introduced
-Auxiliary.type_list={TYPE_ACTION,TYPE_TREASURE,TYPE_VICTORY,TYPE_CURSE,TYPE_ATTACK,TYPE_REACTION}
+Auxiliary.type_list={TYPE_ACTION,TYPE_TREASURE,TYPE_VICTORY,TYPE_CURSE,TYPE_ATTACK,TYPE_REACTION,TYPE_DURATION}
 
 --treasure card
 function Auxiliary.EnableTreasureAttribute(c)
@@ -152,19 +153,21 @@ function Auxiliary.EnableTreasureAttribute(c)
 	c:RegisterEffect(e1)
 	return e1
 end
-function Auxiliary.TreasureFilter(c,coin)
-	return c:GetCost()<=coin
+function Auxiliary.TreasureFilter(c,coin,potion)
+	return c:GetCost()<=coin and (potion>0 or c:GetPotionCost()<=potion)
 end
 function Auxiliary.TreasureTarget(e,tp,eg,ep,ev,re,r,rp,chk)
 	local f=Auxiliary.SupplyFilter(Auxiliary.TreasureFilter)
 	local g=Duel.GetMatchingGroup(Card.IsType,tp,LOCATION_HAND,0,nil,TYPE_TREASURE)
 	local coin=g:GetSum(Card.GetCoin)
-	if chk==0 then return Duel.IsExistingMatchingCard(f,tp,LOCATION_SUPPLY,LOCATION_SUPPLY,1,nil,coin) end
+	local potion=g:GetSum(Card.GetPotion)
+	if chk==0 then return Duel.IsExistingMatchingCard(f,tp,LOCATION_SUPPLY,LOCATION_SUPPLY,1,nil,coin,potion) end
 end
 function Auxiliary.TreasureOperation(e,tp,eg,ep,ev,re,r,rp)
 	local f=Auxiliary.SupplyFilter(Auxiliary.TreasureFilter)
 	local coin=Duel.GetCoins(tp)
-	local g=Duel.GetMatchingGroup(f,tp,LOCATION_SUPPLY,LOCATION_SUPPLY,nil,coin)
+	local potion=Duel.GetPotions(tp)
+	local g=Duel.GetMatchingGroup(f,tp,LOCATION_SUPPLY,LOCATION_SUPPLY,nil,coin,potion)
 	while Duel.GetBuys(tp)>0 and g:GetCount()>0 do
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_GAIN)
 		local tc=g:Select(tp,0,1,nil):GetFirst()
@@ -173,8 +176,10 @@ function Auxiliary.TreasureOperation(e,tp,eg,ep,ev,re,r,rp)
 		Duel.GainCards(tc,REASON_BUY,tp)
 		Duel.RemoveBuy(tp,1)
 		Duel.RemoveCoin(tp,tc:GetCost())
+		Duel.RemovePotion(tp,tc:GetPotionCost())
 		coin=Duel.GetCoins(tp)
-		g=g:Filter(Auxiliary.SupplyFilter(Auxiliary.TreasureFilter),nil,coin)
+		potion=Duel.GetPotions(tp)
+		g=g:Filter(Auxiliary.SupplyFilter(Auxiliary.TreasureFilter),nil,coin,potion)
 		--raise event for buying cards
 		Duel.RaiseEvent(tc,EVENT_CUSTOM+EVENT_BUY,e,0,tp,0,0)
 	end
@@ -250,15 +255,32 @@ function Auxiliary.AddChangeVP(c,val)
 	c:RegisterEffect(e1)
 	return e1
 end
+--"Worth n $"
+--e.g. "Philosopher's Stone" (4-010)
+function Auxiliary.AddChangeCoin(c,val)
+	local e1=Effect.CreateEffect(c)
+	e1:SetType(EFFECT_TYPE_SINGLE)
+	e1:SetCode(EFFECT_CHANGE_COIN)
+	e1:SetValue(val)
+	c:RegisterEffect(e1)
+	return e1
+end
 
 --condition for Reaction effects
---e.g. "Secret Chamber" (2-003)
+--e.g. "Moat" (1-010)
 function Auxiliary.ReactionCondition(e,tp,eg,ep,ev,re,r,rp)
 	return rp==1-tp and re:IsActiveType(TYPE_ATTACK)
 end
 --condition for Duration effects
+--e.g. "Haven" (3-002)
 function Auxiliary.DurationCondition(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.GetTurnPlayer()==tp and Duel.GetTurnCount()~=e:GetLabel()
+end
+--condition to check if a card is in play
+--e.g. "Philosopher's Stone" (4-010)
+function Auxiliary.SelfInPlayCondition(e,tp,eg,ep,ev,re,r,rp)
+	local c=e:GetHandler()
+	return c:IsLocation(LOCATION_INPLAY) and not c:IsReason(REASON_TRASH) 
 end
 --filter for a card in the supply
 function Auxiliary.SupplyFilter(f)

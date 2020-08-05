@@ -110,7 +110,11 @@ function Duel.GetDrawCount(player)
 	local res=5
 	local t={Duel.IsPlayerAffectedByEffect(player,EFFECT_CHANGE_DRAW_COUNT)}
 	for _,te in pairs(t) do
-		res=te:GetValue()
+		if type(te:GetValue())=="function" then
+			res=te:GetValue()(te,c)
+		else
+			res=te:GetValue()
+		end
 	end
 	return res
 end
@@ -135,9 +139,11 @@ function Duel.EndTurn()
 	local ct1=Duel.GetActions(turnp)
 	local ct2=Duel.GetBuys(turnp)
 	local ct3=Duel.GetCoins(turnp)
+	local ct4=Duel.GetPotions(turnp)
 	if ct1>0 then Duel.RemoveAction(turnp,ct1) end
 	if ct2>0 then Duel.RemoveBuy(turnp,ct2) end
 	if ct3>0 then Duel.RemoveCoin(turnp,ct3) end
+	if ct4>0 then Duel.RemovePotion(turnp,ct4) end
 end
 --get all cards a player has
 function Duel.GetAllCards(player)
@@ -183,6 +189,12 @@ function Duel.AddCoin(player,count)
 	--count: the amount of coins to add
 	return Duel.GetCounterHolder(player):AddCounter(COUNTER_COINS,count)
 end
+--increase a player's potions
+function Duel.AddPotion(player,count)
+	--player: the player to add the potions to
+	--count: the amount of potions to add
+	return Duel.GetCounterHolder(player):AddCounter(COUNTER_POTIONS,count)
+end
 --decrease a player's actions
 function Duel.RemoveAction(player,count)
 	--player: the player to remove the actions from
@@ -201,6 +213,12 @@ function Duel.RemoveCoin(player,count)
 	--count: the amount of coins to remove
 	return Duel.GetCounterHolder(player):RemoveCounter(player,COUNTER_COINS,count,REASON_RULE)
 end
+--decrease a player's potions
+function Duel.RemovePotion(player,count)
+	--player: the player to remove the potions from
+	--count: the amount of potions to remove
+	return Duel.GetCounterHolder(player):RemoveCounter(player,COUNTER_POTIONS,count,REASON_RULE)
+end
 --get the amount of actions a player has
 function Duel.GetActions(player)
 	return Duel.GetCounterHolder(player):GetCounter(COUNTER_ACTIONS)
@@ -212,6 +230,10 @@ end
 --get the amount of coins a player has
 function Duel.GetCoins(player)
 	return Duel.GetCounterHolder(player):GetCounter(COUNTER_COINS)
+end
+--get the amount of potions a player has
+function Duel.GetPotions(player)
+	return Duel.GetCounterHolder(player):GetCounter(COUNTER_POTIONS)
 end
 --check if a player can play an action card
 function Duel.IsPlayerCanPlayAction(player)
@@ -358,8 +380,12 @@ function Duel.CheckProvincePile()
 end
 --get the number of empty supply piles
 function Duel.GetEmptySupplyPiles()
+	local MAX_SUPPLY_PILES=17
 	local ct=Duel.GetMatchingGroupCount(aux.SupplyFilter(),0,LOCATION_SUPPLY,LOCATION_SUPPLY,nil)
-	return 17-ct
+	if Duel.CheckPotionRules() then
+		MAX_SUPPLY_PILES=18
+	end
+	return MAX_SUPPLY_PILES-ct
 end
 --add a token to a supply pile
 function Duel.AddToken(targets,tokentype,count)
@@ -441,6 +467,14 @@ function Duel.SendtoSupply(targets)
 			tc:AddCounter(COUNTER_COPIES,1)
 		end
 		res=res+1
+	end
+	return res
+end
+--check if potion rules are applied
+function Duel.CheckPotionRules()
+	local res=false
+	if Duel.GetFirstMatchingCard(aux.SupplyFilter(Card.IsCode),0,LOCATION_SUPPLY,LOCATION_SUPPLY,nil,CARD_POTION) then
+		res=true
 	end
 	return res
 end

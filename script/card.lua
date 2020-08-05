@@ -6,11 +6,19 @@ function Card.GetLevel(c)
 	local res=c:GetOriginalCost()
 	local t1={c:IsHasEffect(EFFECT_UPDATE_COST)}
 	for _,te1 in pairs(t1) do
-		res=res+te1:GetValue()
+		if type(te1:GetValue())=="function" then
+			res=res+te1:GetValue()(te1,c)
+		else
+			res=res+te1:GetValue()
+		end
 	end
 	local t2={c:IsHasEffect(EFFECT_CHANGE_COST)}
 	for _,te2 in pairs(t2) do
-		res=te2:GetValue()
+		if type(te2:GetValue())=="function" then
+			res=te2:GetValue()(te2,c)
+		else
+			res=te2:GetValue()
+		end
 	end
 	return res
 end
@@ -40,6 +48,14 @@ Card.IsCostAbove=Card.IsLevelAbove
 --get the amount of coins a card is worth
 function Card.GetCoin(c)
 	local res=c.coin or 0
+	local t={c:IsHasEffect(EFFECT_CHANGE_COIN)}
+	for _,te in pairs(t) do
+		if type(te:GetValue())=="function" then
+			res=te:GetValue()(te,c)
+		else
+			res=te:GetValue()
+		end
+	end
 	return res
 end
 --get the amount of victory points a card is worth
@@ -55,9 +71,35 @@ function Card.GetVP(c)
 	end
 	return res
 end
+--get the amount of potions a card is worth
+function Card.GetPotion(c)
+	local res=c.potion or 0
+	return res
+end
+--get a card's current potion cost
+function Card.GetPotionCost(c)
+	local res=c.potion_cost or 0
+	return res
+end
+--check if a card's potion cost is equal to a given value
+function Card.IsPotionCost(c,cost)
+	return c:GetPotionCost()==cost
+end
+--check if a card's potion cost is less than or equal to a given value
+function Card.IsPotionCostBelow(c,cost)
+	return c:GetPotionCost()<=cost
+end
+--check if a card's potion cost is greater than or equal to a given value
+function Card.IsPotionCostAbove(c,cost)
+	return c:GetPotionCost()>=cost
+end
 --check if a card has victory points
 function Card.IsHasVP(c)
 	return c.vp
+end
+--check if a card has P in its cost
+function Card.IsHasPotionCost(c)
+	return c.potion_cost
 end
 --get the number of card types a card has
 function Card.GetTypeCount(c)

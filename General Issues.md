@@ -7,11 +7,12 @@
 - [ ] **If you do the following with your deck, the game does not first put your discard pile onto your deck:**
 	- [x] `Duel.ConfirmDecktop`: Looking/revealing more cards than are in your deck
 	- [ ] `Duel.ConfirmCards`: Looking/revealing more cards than are in your deck
-	- [ ] `TBA`: Setting aside more cards than are in your deck
+	- [ ] `Duel.SetAsideDeck`: Setting aside more cards than are in your deck
 	- [x] `Duel.DiscardDeck`: Discarding more cards than are in your deck
 	- [x] `Duel.TrashDeck`: Trashing more cards than are in your deck
 	- [ ] `Duel.SendtoDPile(targets,reason+REASON_DISCARD,target_player)`: Discarding more cards than are in your deck
 	- [ ] `Duel.Trash`: Trashing more cards than are in your deck
+- [ ] **You can't buy a card that costs 0 if you don't have any Treasure cards**
 ## Deck Building
 - [x] **The 10 Kingdom cards are chosen at random at the start of the game**
 - [ ] **The player who goes first chooses the set to play with**
@@ -24,6 +25,7 @@
 	- [ ] Native Village(10003004): There are no zones for the [Native Village mat](http://wiki.dominionstrategy.com/index.php/Mat#Player_mats).
 	- [ ] Island(10003013): There are no zones for the Island mat.
 	- [ ] Pirate Ship(10003015): There are no zones for the Pirate Ship mat.
+	- [ ] Possession(10004013): Can't make decisions for the opponent.
 ## Card Effects
 - [ ] **You don't always look through your entire deck when you take a card from it**
 - If you're required to take a specific card from your deck, the game will only show you the relevant cards.
