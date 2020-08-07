@@ -148,26 +148,35 @@ function Auxiliary.EnableTreasureAttribute(c)
 	e1:SetProperty(EFFECT_FLAG_PLAY_PARAM)
 	e1:SetRange(LOCATION_HAND)
 	e1:SetHintTiming(TIMING_BUY_PHASE,0)
+	e1:SetCondition(Auxiliary.TreasureCondition)
 	e1:SetTarget(Auxiliary.TreasureTarget)
 	e1:SetOperation(Auxiliary.TreasureOperation)
 	c:RegisterEffect(e1)
-	return e1
+	local e2=Effect.CreateEffect(c)
+	e2:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_F)
+	e2:SetCode(EVENT_CUSTOM+EVENT_PLAY_TREASURE)
+	e2:SetOperation(Auxiliary.TreasureOperation)
+	c:RegisterEffect(e2)
+	return e1,e2
+end
+function Auxiliary.TreasureCondition(e,tp,eg,ep,ev,re,r,rp)
+	return Duel.GetCurrentChain()==0
 end
 function Auxiliary.TreasureFilter(c,coin,potion)
-	return c:GetCost()<=coin and (potion>0 or c:GetPotionCost()<=potion)
+	return c:GetCost()<=coin and (potion>0 or c:GetPotionCost()<=potion) and c:IsCanBeBought()
 end
 function Auxiliary.TreasureTarget(e,tp,eg,ep,ev,re,r,rp,chk)
 	local f=Auxiliary.SupplyFilter(Auxiliary.TreasureFilter)
 	local g=Duel.GetMatchingGroup(Card.IsType,tp,LOCATION_HAND,0,nil,TYPE_TREASURE)
 	local coin=g:GetSum(Card.GetCoin)
 	local potion=g:GetSum(Card.GetPotion)
-	if chk==0 then return Duel.IsExistingMatchingCard(f,tp,LOCATION_SUPPLY,LOCATION_SUPPLY,1,nil,coin,potion) end
+	if chk==0 then return Duel.IsExistingMatchingCard(f,0,LOCATION_SUPPLY,LOCATION_SUPPLY,1,nil,coin,potion) end
 end
 function Auxiliary.TreasureOperation(e,tp,eg,ep,ev,re,r,rp)
 	local f=Auxiliary.SupplyFilter(Auxiliary.TreasureFilter)
 	local coin=Duel.GetCoins(tp)
 	local potion=Duel.GetPotions(tp)
-	local g=Duel.GetMatchingGroup(f,tp,LOCATION_SUPPLY,LOCATION_SUPPLY,nil,coin,potion)
+	local g=Duel.GetMatchingGroup(f,0,LOCATION_SUPPLY,LOCATION_SUPPLY,nil,coin,potion)
 	while Duel.GetBuys(tp)>0 and g:GetCount()>0 do
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_GAIN)
 		local tc=g:Select(tp,0,1,nil):GetFirst()
@@ -181,7 +190,8 @@ function Auxiliary.TreasureOperation(e,tp,eg,ep,ev,re,r,rp)
 		potion=Duel.GetPotions(tp)
 		g=g:Filter(Auxiliary.SupplyFilter(Auxiliary.TreasureFilter),nil,coin,potion)
 		--raise event for buying cards
-		Duel.RaiseEvent(tc,EVENT_CUSTOM+EVENT_BUY,e,0,tp,0,0)
+		Duel.RaiseEvent(tc,EVENT_CUSTOM+EVENT_BUY,e,0,tp,tp,0)
+		Duel.RaiseSingleEvent(tc,EVENT_CUSTOM+EVENT_BUY,e,0,tp,tp,0)
 	end
 end
 
@@ -204,7 +214,7 @@ function Auxiliary.AddActionEffect(c,op_func)
 	return e1,e2
 end
 --Reaction effects
---e.g. "Moat" (1-010)
+--"When another player plays an Attack card, you may reveal this from your hand" (e.g. "Moat" 1-010)
 function Auxiliary.AddReactionEffect(c,op_func,con_func)
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_QUICK_O)
@@ -219,13 +229,14 @@ end
 --e.g. "Haven" (3-002)
 function Auxiliary.AddDurationEffect(c,tc,con_func,op_func)
 	--Note: Using EVENT_PHASE+PHASE_ACTION instead of EVENT_TURN_START causes YGOPro to crash
+	con_func=con_func or aux.TRUE
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
 	e1:SetCode(EVENT_TURN_START)
 	e1:SetRange(LOCATION_INPLAY)
 	e1:SetCountLimit(1)
 	e1:SetLabel(Duel.GetTurnCount())
-	e1:SetCondition(con_func)
+	e1:SetCondition(aux.AND(Auxiliary.SelfInPlayCondition,con_func))
 	e1:SetOperation(op_func)
 	tc:RegisterEffect(e1)
 	return e1
@@ -266,6 +277,19 @@ function Auxiliary.AddChangeCoin(c,val)
 	return e1
 end
 
+--condition to check who the event player is
+function Auxiliary.EventPlayerCondition(p)
+	return	function(e,tp,eg,ep,ev,re,r,rp)
+				local player=(p==PLAYER_SELF and tp) or (p==PLAYER_OPPO and 1-tp)
+				return ep==player
+			end
+end
+--condition to check if it is the given phase of the turn
+function Auxiliary.PhaseCondition(phase)
+	return	function(e,tp,eg,ep,ev,re,r,rp)
+				return Duel.GetCurrentPhase()==phase
+			end
+end
 --condition for Reaction effects
 --e.g. "Moat" (1-010)
 function Auxiliary.ReactionCondition(e,tp,eg,ep,ev,re,r,rp)

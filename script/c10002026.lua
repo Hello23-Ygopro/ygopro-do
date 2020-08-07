@@ -16,7 +16,7 @@ function scard.op1(e,tp,eg,ep,ev,re,r,rp)
 	local sel=sel_list[opt]
 	if bit.band(sel,0x1)~=0 then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TRASH)
-		local g=Duel.SelectMatchingCard(tp,aux.SupplyFilter(scard.trfilter),tp,LOCATION_SUPPLY,LOCATION_SUPPLY,1,1,nil)
+		local g=Duel.SelectMatchingCard(tp,aux.SupplyFilter(scard.trfilter),0,LOCATION_SUPPLY,LOCATION_SUPPLY,1,1,nil)
 		if g:GetCount()>0 then
 			Duel.HintSelection(g)
 			Duel.Trash(g,REASON_EFFECT,tp)
@@ -24,7 +24,7 @@ function scard.op1(e,tp,eg,ep,ev,re,r,rp)
 	end
 	if bit.band(sel,0x2)~=0 then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_GAIN)
-		local g=Duel.SelectMatchingCard(tp,aux.SupplyFilter(Card.IsType),tp,LOCATION_SUPPLY,LOCATION_SUPPLY,1,1,nil,TYPE_ACTION)
+		local g=Duel.SelectMatchingCard(tp,aux.SupplyFilter(Card.IsType),0,LOCATION_SUPPLY,LOCATION_SUPPLY,1,1,nil,TYPE_ACTION)
 		if g:GetCount()>0 then
 			Duel.HintSelection(g)
 			Duel.GainCards(g,REASON_EFFECT,tp)

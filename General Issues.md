@@ -4,14 +4,11 @@
 - [ ] **If players have negative VP, their score shows 0**
 - [ ] **Cards in the discard pile can't be shuffled**
 - If you place cards from the discard pile onto your deck for an effect that requires more cards than are in your deck, the game will shuffle your deck.
-- [ ] **If you do the following with your deck, the game does not first put your discard pile onto your deck:**
+- [x] **If you do the following with your deck, the game does not first put your discard pile onto your deck:**
 	- [x] `Duel.ConfirmDecktop`: Looking/revealing more cards than are in your deck
-	- [ ] `Duel.ConfirmCards`: Looking/revealing more cards than are in your deck
-	- [ ] `Duel.SetAsideDeck`: Setting aside more cards than are in your deck
+	- [x] `Duel.SetAsideDeck`: Setting aside more cards than are in your deck
 	- [x] `Duel.DiscardDeck`: Discarding more cards than are in your deck
 	- [x] `Duel.TrashDeck`: Trashing more cards than are in your deck
-	- [ ] `Duel.SendtoDPile(targets,reason+REASON_DISCARD,target_player)`: Discarding more cards than are in your deck
-	- [ ] `Duel.Trash`: Trashing more cards than are in your deck
 - [ ] **You can't buy a card that costs 0 if you don't have any Treasure cards**
 ## Deck Building
 - [x] **The 10 Kingdom cards are chosen at random at the start of the game**
@@ -19,6 +16,8 @@
 ## Zones
 - [ ] **There are no [zones](https://yugioh.fandom.com/wiki/Zone) for cards in play**
 - [Face-up](https://yugioh.fandom.com/wiki/Face-up) temporarily [banished](https://yugioh.fandom.com/wiki/Banish) cards are in play.
+- [ ] **There are no zones for the [Trade Route](wiki.dominionstrategy.com/index.php/Trade_Route) mat**
+- Check the Counter holder card to view the contents of the Trade Route mat (e.g. _Coin token(Trade Route mat)_)
 ## Cards
 - [ ] **The following cards are not fully implemented**
 	- [ ] Lighthouse(10003003): Doesn't prevent the opponent from making you gain cards (e.g. _Sea Hag_)

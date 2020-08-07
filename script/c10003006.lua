@@ -18,7 +18,7 @@ function scard.op1(e,tp,eg,ep,ev,re,r,rp)
 	if g2:GetCount()>0 then
 		Duel.SendtoSupply(g2)
 	end
-	local tc2=Duel.GetFirstMatchingCard(aux.SupplyFilter(Card.IsCode),1-tp,LOCATION_SUPPLY,LOCATION_SUPPLY,nil,code)
+	local tc2=Duel.GetFirstMatchingCard(aux.SupplyFilter(Card.IsCode),0,LOCATION_SUPPLY,LOCATION_SUPPLY,nil,code)
 	Duel.BreakEffect()
 	Duel.GainCards(tc2,REASON_EFFECT,1-tp)
 end

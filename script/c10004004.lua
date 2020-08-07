@@ -22,7 +22,8 @@ function scard.tdfilter(c)
 	return c:IsType(TYPE_TREASURE) and c:IsAbleToDeck()
 end
 function scard.con1(e,tp,eg,ep,ev,re,r,rp)
-	return e:GetHandler():IsPreviousLocation(LOCATION_INPLAY)
+	local c=e:GetHandler()
+	return c:IsReason(REASON_DISCARD) and c:IsPreviousLocation(LOCATION_INPLAY)
 		and Duel.IsExistingMatchingCard(aux.InPlayFilter(scard.tdfilter),tp,LOCATION_INPLAY,0,1,nil)
 end
 function scard.op2(e,tp,eg,ep,ev,re,r,rp)

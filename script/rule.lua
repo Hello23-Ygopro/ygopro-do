@@ -36,6 +36,7 @@ function Rule.ApplyRules(e,tp,eg,ep,ev,re,r,rp)
 	Duel.RegisterEffect(e1,0)
 	--put in play
 	local e2=Effect.GlobalEffect()
+	e2:SetProperty(EFFECT_FLAG_IGNORE_IMMUNE)
 	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
 	e2:SetCode(EVENT_CHAINING)
 	e2:SetOperation(Rule.PutInPlayOperation)
@@ -221,11 +222,13 @@ kingdom_card_list["Renaissance"]={
 	10013011,10013012,10013013,10013014,10013015,10013016,10013017,10013018,10013019,10013020,
 	10013021,10013022,10013023,10013024,10013025
 }
+Rule.platinum=false
+Rule.colony=false
 function Rule.setup_kingdom_cards()
 	--choose a card set
 	local card_list={}
-	local sel_list={0x1,0x2,0x4,0x8}
-	local option_list={OPTION_BASE,OPTION_INTRIGUE,OPTION_SEASIDE,OPTION_ALCHEMY}
+	local sel_list={0x1,0x2,0x4,0x8,0x10}
+	local option_list={OPTION_BASE,OPTION_INTRIGUE,OPTION_SEASIDE,OPTION_ALCHEMY,OPTION_PROSPERITY}
 	Duel.Hint(HINT_SELECTMSG,PLAYER_ONE,HINTMSG_CHOOSESET)
 	local opt=Duel.SelectOption(PLAYER_ONE,table.unpack(option_list))+1
 	local sel=sel_list[opt]
@@ -240,6 +243,9 @@ function Rule.setup_kingdom_cards()
 	end
 	if bit.band(sel,0x8)~=0 then
 		card_list=kingdom_card_list["Alchemy"]
+	end
+	if bit.band(sel,0x10)~=0 then
+		card_list=kingdom_card_list["Prosperity"]
 	end
 	--add cards to the game
 	for i=1,10 do
@@ -269,15 +275,22 @@ function Rule.setup_kingdom_cards()
 		local card=Duel.CreateCard(PLAYER_TWO,CARD_POTION)
 		Duel.MoveToField(card,PLAYER_ONE,PLAYER_TWO,LOCATION_MZONE,POS_FACEUP_ATTACK,true,ZONE_POTION)
 	end
+	--add platinum and colony to the game
+	if bit.band(sel,0x10)~=0 then
+		if Duel.SelectYesNo(PLAYER_ONE,YESNOMSG_USEPLATINUM) and Duel.SelectYesNo(PLAYER_TWO,YESNOMSG_USEPLATINUM) then
+			Rule.platinum=true
+			Rule.colony=true
+		end
+	end
 end
 --set up base cards
 function Rule.setup_base_cards()
 	local card1=Duel.CreateCard(PLAYER_TWO,CARD_COPPER)
 	local card2=Duel.CreateCard(PLAYER_TWO,CARD_SILVER)
-	local card3=Duel.CreateCard(PLAYER_TWO,CARD_GOLD)
+	local card3=(Rule.platinum==false and Duel.CreateCard(PLAYER_TWO,CARD_GOLD) or Duel.CreateCard(PLAYER_TWO,CARD_PLATINUM))
 	local card4=Duel.CreateCard(PLAYER_TWO,CARD_ESTATE)
 	local card5=Duel.CreateCard(PLAYER_TWO,CARD_DUCHY)
-	local card6=Duel.CreateCard(PLAYER_TWO,CARD_PROVINCE)
+	local card6=(Rule.colony==false and Duel.CreateCard(PLAYER_TWO,CARD_PROVINCE) or Duel.CreateCard(PLAYER_TWO,CARD_COLONY))
 	local card7=Duel.CreateCard(PLAYER_TWO,CARD_CURSE)
 	Duel.MoveToField(card1,PLAYER_ONE,PLAYER_TWO,LOCATION_MZONE,POS_FACEUP_ATTACK,true,ZONE_COPPER)
 	Duel.MoveToField(card2,PLAYER_ONE,PLAYER_TWO,LOCATION_MZONE,POS_FACEUP_ATTACK,true,ZONE_SILVER)
@@ -296,9 +309,12 @@ function Rule.add_copies()
 			if c:IsCode(CARD_COPPER) then c:AddCounter(COUNTER_COPIES,46)
 			elseif c:IsCode(CARD_SILVER) then c:AddCounter(COUNTER_COPIES,40)
 			elseif c:IsCode(CARD_GOLD) then c:AddCounter(COUNTER_COPIES,30)
+			elseif c:IsCode(CARD_PLATINUM) then c:AddCounter(COUNTER_COPIES,12)
 			elseif c:IsCode(CARD_POTION) then c:AddCounter(COUNTER_COPIES,16)
 			elseif c:IsStatus(STATUS_KINGDOM) or c:IsType(TYPE_CURSE) then c:AddCounter(COUNTER_COPIES,10) end
 		end
+		--raise event for setup
+		Duel.RaiseEvent(c,EVENT_CUSTOM+EVENT_SETUP,Effect.GlobalEffect(),0,0,0,0)
 	end
 end
 --start turn
@@ -315,11 +331,13 @@ end
 function Rule.PutInPlayOperation(e,tp,eg,ep,ev,re,r,rp)
 	local rc=re:GetHandler()
 	local cp=rc:GetControler()
-	if rc:IsType(TYPE_ACTION) then
+	if rc:IsType(TYPE_ACTION) and not rc:IsType(TYPE_REACTION) then
 		if re:IsHasProperty(EFFECT_FLAG_PLAY_PARAM) then
 			Duel.RemoveAction(cp,1)
 		end
 		Duel.SendtoInPlay(rc,REASON_RULE)
+		--raise event for playing action cards
+		Duel.RaiseSingleEvent(rc,EVENT_CUSTOM+EVENT_PLAY,e,0,0,0,0)
 	elseif rc:IsType(TYPE_TREASURE) then
 		local g=Duel.GetMatchingGroup(Card.IsType,cp,LOCATION_HAND,0,nil,TYPE_TREASURE)
 		Duel.SendtoInPlay(g,REASON_RULE)
@@ -339,6 +357,10 @@ function Rule.PutInPlayOperation(e,tp,eg,ep,ev,re,r,rp)
 		end
 		if coin>0 then Duel.AddCoin(cp,coin) end
 		if potion>0 then Duel.AddPotion(cp,potion) end
+		--raise event for playing treasure cards
+		for tc in aux.Next(g) do
+			Duel.RaiseSingleEvent(tc,EVENT_CUSTOM+EVENT_PLAY,e,0,0,0,0)
+		end
 	end
 end
 --limit actions
@@ -353,6 +375,8 @@ function Rule.LimitAction(e,re,tp)
 	return re:IsHasProperty(EFFECT_FLAG_PLAY_PARAM) and rc:IsType(TYPE_ACTION)
 		--check for "You may play an Action card from your hand twice" ("Throne Room" 1-024)
 		and not rc:IsHasEffect(EFFECT_PLAY_ACTION_TWICE)
+		--check for "You may play an Action card from your hand three times" ("King's Court" 5-026)
+		and not rc:IsHasEffect(EFFECT_PLAY_ACTION_THRICE)
 end
 --limit buys
 function Rule.LimitBuyCondition1(e)
@@ -374,11 +398,11 @@ function Rule.CleanupOperation(e,tp,eg,ep,ev,re,r,rp)
 	local g1=Duel.GetMatchingGroup(aux.InPlayFilter(Rule.CleanupFilter),turnp,LOCATION_INPLAY,0,nil)
 	local g2=Duel.GetMatchingGroup(Rule.CleanupFilter,turnp,LOCATION_HAND,0,nil)
 	g1:Merge(g2)
-	Duel.SendtoDPile(g1,REASON_RULE,turnp)
-	local g3=Duel.GetMatchingGroup(Card.IsCanBeCleanedUp,turnp,LOCATION_INPLAY,0,nil)
+	Duel.SendtoDPile(g1,REASON_RULE+REASON_DISCARD,turnp)
+	local g3=Duel.GetMatchingGroup(aux.InPlayFilter(Card.IsCanBeCleanedUp),turnp,LOCATION_INPLAY,0,nil)
 	local g4=Duel.GetMatchingGroup(Card.IsCanBeCleanedUp,turnp,LOCATION_HAND,0,nil)
 	g3:Merge(g4)
-	Duel.SendtoDPile(g3,REASON_RULE,turnp)
+	Duel.SendtoDPile(g3,REASON_RULE+REASON_DISCARD,turnp)
 	Duel.Draw(turnp,Duel.GetDrawCount(turnp),REASON_RULE)
 	Duel.EndTurn()
 end

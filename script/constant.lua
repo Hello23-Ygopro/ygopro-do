@@ -13,9 +13,14 @@ CARD_DUCHY			=10001005	--Duchy
 CARD_GOLD			=10001006	--Gold
 CARD_PROVINCE		=10001007	--Province
 CARD_POTION			=10004001	--Potion
+CARD_PLATINUM		=10005001	--Platinum
+CARD_COLONY			=10005002	--Colony
 CARD_VASSAL			=10001035	--EVENT_CUSTOM+EVENT_PLAY_ACTION
 CARD_EMBARGO		=10003001	--EVENT_CUSTOM+EVENT_BUY
 CARD_SMUGGLERS		=10003009	--EVENT_CUSTOM+EVENT_GAIN
+CARD_LOAN			=10005003	--EVENT_CUSTOM+EVENT_PLAY
+CARD_TRADE_ROUTE	=10005004	--EVENT_CUSTOM+EVENT_SETUP
+CARD_VENTURE		=10005019	--EVENT_CUSTOM+EVENT_PLAY_TREASURE
 --Location
 LOCATION_ALL		=0xff		--All locations
 LOCATION_DECK		=0x01		--Deck
@@ -55,6 +60,8 @@ ZONE_ESTATE			=0x1	--Estate
 ZONE_DUCHY			=0x2	--Duchy
 ZONE_PROVINCE		=0x4	--Province
 ZONE_CURSE			=0x8	--Curse
+ZONE_PLATINUM		=0xff	--(reserved) Platinum
+ZONE_COLONY			=0xff	--(reserved) Colony
 --Position
 POS_FACEUP_ATTACK		=0x1	--Face-up Attack Position
 POS_FACEDOWN_ATTACK		=0x2	--Face-down Attack Position
@@ -202,7 +209,7 @@ STATUS_DESTROY_CONFIRMED	=0x1000		--(unused)
 STATUS_LEAVE_CONFIRMED		=0x2000		--(unused)
 STATUS_BATTLE_DESTROYED		=0x4000		--(unused)
 STATUS_COPYING_EFFECT		=0x8000		--(unused)
-STATUS_CHAINING				=0x10000	--(unused)
+STATUS_CHAINING				=0x10000	--In a Chain
 STATUS_SUMMON_DISABLED		=0x20000	--(unused)
 STATUS_ACTIVATE_DISABLED	=0x40000	--(unused)
 STATUS_EFFECT_REPLACED		=0x80000	--(unused)
@@ -248,6 +255,8 @@ COUNTER_COINS				=0x1004	--This represents the amount of Coins a player has
 COUNTER_EMBARGO_TOKEN		=0x1005	--This represents Embargo token
 COUNTER_COIN_TOKEN			=0x1006	--This represents Coin token
 COUNTER_POTIONS				=0x1007	--This represents the amount of Potions a player has
+COUNTER_COIN_TOKEN_TR		=0x1008	--This represents Coin token on the Trade Route mat
+COUNTER_VP_TOKEN			=0x1009 --This represents VP token
 --Phase
 PHASE_ACTION		=0x01	--Action phase
 PHASE_BUY			=0x02	--Buy phase
@@ -326,13 +335,13 @@ EFFECT_TYPE_ACTIONS			=0x0008		--(unused)
 EFFECT_TYPE_ACTIVATE		=0x0010		--(unused)
 EFFECT_TYPE_FLIP			=0x0020		--(unused)
 EFFECT_TYPE_IGNITION		=0x0040		--(unused)
-EFFECT_TYPE_TRIGGER_O		=0x0080		--(unused)
+EFFECT_TYPE_TRIGGER_O		=0x0080		--Optional Trigger Effect
 EFFECT_TYPE_QUICK_O			=0x0100		--Optional Quick Effect
 EFFECT_TYPE_TRIGGER_F		=0x0200		--Mandatory Trigger Effect
 EFFECT_TYPE_QUICK_F			=0x0400		--(unused)
 EFFECT_TYPE_CONTINUOUS		=0x0800		--Continuous Effect, non-Chaining effect
 EFFECT_TYPE_XMATERIAL		=0x1000		--(unused)
-EFFECT_TYPE_GRANT			=0x2000		--(unused)
+EFFECT_TYPE_GRANT			=0x2000		--Effect granted to another card
 EFFECT_TYPE_TARGET			=0x4000		--(unused, not available in YGOPro Percy)
 --Flag
 --Characteristics of effects
@@ -657,6 +666,8 @@ EFFECT_UPDATE_PLATINUM_PRODUCE		=614	--(reserved) Increase/decrease the amount o
 EFFECT_EMBARGO						=620	--The player who buys a card with this effect gains a Curse ("Embargo" 3-001)
 EFFECT_DONOT_CLEANUP				=621	--Do not clean up (Duration card)
 EFFECT_CHANGE_DRAW_COUNT			=622	--Change default draw count ("Outpost" 3-023, do not use EFFECT_DRAW_COUNT)
+EFFECT_CANNOT_BE_BOUGHT				=623	--Cannot be bought ("Grand Market" 5-021)
+EFFECT_PLAY_ACTION_THRICE			=624	--Action card may be played three times ("King's Court" 5-026)
 --Event Code
 --Events that can be used as a trigger for Trigger Effects
 EVENT_STARTUP					=1000	--(unused)
@@ -732,9 +743,12 @@ EVENT_ADD_COUNTER				=0x10000	--(unused, combined with counter ID)
 EVENT_REMOVE_COUNTER			=0x20000	--(unused, combined with counter ID)
 EVENT_CUSTOM					=0x10000000	--Custom event
 --The following is only available in YGOPro DO
-EVENT_PLAY_ACTION				=CARD_VASSAL	--Play an Action card
-EVENT_BUY						=CARD_EMBARGO	--When a player buys a card
-EVENT_GAIN						=CARD_SMUGGLERS	--When a player gains a card
+EVENT_PLAY_ACTION				=CARD_VASSAL		--Play an Action card (trigger the effect of an Action card)
+EVENT_PLAY_TREASURE				=CARD_VENTURE		--Play a Treasure card (trigger the effect of a Treasure card)
+EVENT_BUY						=CARD_EMBARGO		--When a player buys a card
+EVENT_GAIN						=CARD_SMUGGLERS		--When a player gains a card
+EVENT_PLAY						=CARD_LOAN			--When a player plays a card
+EVENT_SETUP						=CARD_TRADE_ROUTE	--During setup
 --Effect Category
 --Hint
 --Message displayed in the center of the screen
@@ -790,6 +804,8 @@ HINTMSG_CONFIRM			=510	--Select a card to show your opponent.
 HINTMSG_ADDTOKEN		=511	--Select a card to add a token to.
 HINTMSG_SET				=512	--Select a card to set aside.
 HINTMSG_TOSUPPLY		=513	--Select a card to return to the Supply.
+HINTMSG_TOHAND			=514	--Select a card to put into your hand.
+HINTMSG_PLAYTHRICE		=515	--Select a card to play three times.
 --Information displayed in a dialog box
 ERROR_NOTARGETS			=1630	--There is no applicable card.
 ERROR_NOBONUSES			=1631	--You did not meet the requirements to gain a bonus.
@@ -818,18 +834,23 @@ YESNOMSG_USEEMPIRES		=711	--(reserved) Use cards from Empires?
 YESNOMSG_USENOCTURNE	=712	--(reserved) Use cards from Nocturne?
 YESNOMSG_USEMENAGERIE	=713	--(reserved) Use cards from Menagerie?
 YESNOMSG_USERENAISSANCE	=714	--(reserved) Use cards from Renaissance?
+YESNOMSG_USEPLATINUM	=800	--Include Platinum and Colony?
 --Option (for Duel.SelectOption)
 OPTION_HEADS			=60		--(unused)
 OPTION_TAILS			=61		--(unused)
 OPTION_DECKTOP			=1170	--Top of the deck.
 OPTION_DECKBOT			=1171	--Bottom of the deck.
 OPTION_DECKSHF			=1172	--Shuffle into the deck.
+OPTION_DISCARDDECK		=1173	--Discard a card from the deck.
+OPTION_TRASHDECK		=1174	--Trash a card from the deck.
+OPTION_TRASH			=1175	--Trash a card.
+OPTION_TODECK			=1176	--Put a card onto the deck.
 OPTION_PROMO			=1650	--(reserved) Promotional
 OPTION_BASE				=1651	--Base
 OPTION_INTRIGUE			=1652	--Intrigue
-OPTION_SEASIDE			=1653	--(reserved) Seaside
-OPTION_ALCHEMY			=1654	--(reserved) Alchemy
-OPTION_PROSPERITY		=1655	--(reserved) Prosperity
+OPTION_SEASIDE			=1653	--Seaside
+OPTION_ALCHEMY			=1654	--Alchemy
+OPTION_PROSPERITY		=1655	--Prosperity
 OPTION_CORNUCOPIA		=1656	--(reserved) Cornucopia
 OPTION_HINTERLANDS		=1657	--(reserved) Hinterlands
 OPTION_DARK_AGES		=1658	--(reserved) Dark Ages
@@ -841,6 +862,8 @@ OPTION_RENAISSANCE		=1663	--(reserved) Renaissance
 OPTION_MENAGERIE		=1664	--(reserved) Menagerie
 --Description (for SetDescription, EFFECT_FLAG_CLIENT_HINT)
 DESC_PLAY_TWICE			=300	--May be played twice
+DESC_CANNOT_BE_BOUGHT	=301	--Cannot be bought
+DESC_PLAY_THRICE		=302	--May be played three times
 DESC_MORE_COPPER		=400	--Copper produces more $
 DESC_IMMUNE_ATTACK		=401	--Unaffected by Attack cards
 --Timing

@@ -12,7 +12,7 @@ function scard.op1(e,tp,eg,ep,ev,re,r,rp)
 	if g:GetCount()>0 and Duel.SendtoDPile(g,REASON_EFFECT+REASON_DISCARD,tp)>0 then
 		Duel.AddCoin(tp,4)
 	else
-		local tc=Duel.GetFirstMatchingCard(aux.SupplyFilter(Card.IsCode),tp,LOCATION_SUPPLY,LOCATION_SUPPLY,nil,CARD_ESTATE)
+		local tc=Duel.GetFirstMatchingCard(aux.SupplyFilter(Card.IsCode),0,LOCATION_SUPPLY,LOCATION_SUPPLY,nil,CARD_ESTATE)
 		Duel.GainCards(tc,REASON_EFFECT,tp)
 	end
 end

@@ -37,7 +37,7 @@ function scard.gainfilter(c)
 end
 function scard.op1(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_GAIN)
-	local g=Duel.SelectMatchingCard(tp,aux.SupplyFilter(scard.gainfilter),tp,LOCATION_SUPPLY,LOCATION_SUPPLY,1,1,nil)
+	local g=Duel.SelectMatchingCard(tp,aux.SupplyFilter(scard.gainfilter),0,LOCATION_SUPPLY,LOCATION_SUPPLY,1,1,nil)
 	if g:GetCount()>0 then
 		Duel.HintSelection(g)
 		Duel.GainCards(g,REASON_EFFECT,tp)

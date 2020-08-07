@@ -9,10 +9,10 @@ function scard.op1(e,tp,eg,ep,ev,re,r,rp)
 	Duel.AddCoin(tp,2)
 	if Duel.Trash(e:GetHandler(),REASON_EFFECT,tp)==0 then return end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ADDTOKEN)
-	local g=Duel.SelectMatchingCard(tp,aux.SupplyFilter(),tp,LOCATION_SUPPLY,LOCATION_SUPPLY,1,1,nil)
+	local g=Duel.SelectMatchingCard(tp,aux.SupplyFilter(),0,LOCATION_SUPPLY,LOCATION_SUPPLY,1,1,nil)
 	if g:GetCount()==0 then return end
 	Duel.HintSelection(g)
-	Duel.AddToken(g,COUNTER_EMBARGO_TOKEN,1)
+	Duel.AddSupplyToken(g,COUNTER_EMBARGO_TOKEN,1)
 	--gain
 	local e1=Effect.CreateEffect(e:GetHandler())
 	e1:SetDescription(aux.Stringid(sid,1))

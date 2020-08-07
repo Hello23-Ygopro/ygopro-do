@@ -18,6 +18,7 @@ function scard.op1(e,tp,eg,ep,ev,re,r,rp)
 		Duel.SendtoHand(sg,tp,REASON_EFFECT)
 		Duel.ConfirmCards(1-tp,sg)
 		Duel.ShuffleHand(tp)
+		g:Sub(sg)
 	end
 	Duel.SortDecktop(tp,tp,g:GetCount())
 end

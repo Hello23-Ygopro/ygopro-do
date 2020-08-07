@@ -24,7 +24,7 @@ function scard.cfilter(c,tid)
 end
 function scard.con1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	return c:IsPreviousLocation(LOCATION_INPLAY) and c:IsAbleToDeck()
+	return c:IsReason(REASON_DISCARD) and c:IsPreviousLocation(LOCATION_INPLAY) and c:IsAbleToDeck()
 		and not Duel.IsExistingMatchingCard(scard.cfilter,tp,LOCATION_ALL,LOCATION_ALL,1,nil,Duel.GetTurnCount())
 end
 function scard.op2(e,tp,eg,ep,ev,re,r,rp)

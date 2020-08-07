@@ -18,7 +18,7 @@ function scard.op1(e,tp,eg,ep,ev,re,r,rp)
 		Duel.DiscardHand(1-tp,aux.TRUE,2,2,REASON_EFFECT+REASON_DISCARD)
 	end
 	if bit.band(sel,0x2)~=0 then
-		local tc=Duel.GetFirstMatchingCard(aux.SupplyFilter(scard.thfilter),1-tp,LOCATION_SUPPLY,LOCATION_SUPPLY,nil)
+		local tc=Duel.GetFirstMatchingCard(aux.SupplyFilter(scard.thfilter),0,LOCATION_SUPPLY,LOCATION_SUPPLY,nil)
 		Duel.GainCards(tc,REASON_EFFECT,1-tp,LOCATION_HAND)
 	end
 end

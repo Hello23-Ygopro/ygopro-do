@@ -22,7 +22,7 @@ function scard.op1(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function scard.gain(tp,code)
-	local tc=Duel.GetFirstMatchingCard(aux.SupplyFilter(Card.IsCode),tp,LOCATION_SUPPLY,LOCATION_SUPPLY,nil,code)
+	local tc=Duel.GetFirstMatchingCard(aux.SupplyFilter(Card.IsCode),0,LOCATION_SUPPLY,LOCATION_SUPPLY,nil,code)
 	Duel.GainCards(tc,REASON_EFFECT,tp)
 end
 --[[

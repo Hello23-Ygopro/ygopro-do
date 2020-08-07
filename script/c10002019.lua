@@ -31,7 +31,7 @@ function scard.op1(e,tp,eg,ep,ev,re,r,rp)
 		local tc=Duel.GetOperatedCard()
 		local cost=tc:GetCost()
 		Duel.Hint(HINT_SELECTMSG,1-tp,HINTMSG_GAIN)
-		local g2=Duel.SelectMatchingCard(1-tp,aux.SupplyFilter(Card.IsCostBelow),1-tp,LOCATION_SUPPLY,LOCATION_SUPPLY,0,1,nil,cost-2)
+		local g2=Duel.SelectMatchingCard(1-tp,aux.SupplyFilter(Card.IsCostBelow),0,LOCATION_SUPPLY,LOCATION_SUPPLY,0,1,nil,cost-2)
 		if g2:GetCount()>0 then
 			Duel.HintSelection(g2)
 			Duel.GainCards(g2,REASON_EFFECT,1-tp)

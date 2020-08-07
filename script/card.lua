@@ -115,6 +115,10 @@ end
 function Card.IsCanBeCleanedUp(c)
 	return not c:IsHasEffect(EFFECT_DONOT_CLEANUP)
 end
+--check if a card can be bought
+function Card.IsCanBeBought(c)
+	return not c:IsHasEffect(EFFECT_CANNOT_BE_BOUGHT)
+end
 --Renamed Card functions
 --get a card's original cost
 Card.GetOriginalCost=Card.GetOriginalLevel

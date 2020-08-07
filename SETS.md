@@ -11,7 +11,7 @@
 - ~**July, 2009** : [Intrigue](http://wiki.dominionstrategy.com/index.php/Intrigue) : `10002XXX`~
 - ~**October, 2009** : [Seaside](http://wiki.dominionstrategy.com/index.php/Seaside) : `10003XXX`~
 - ~**May, 2010** : [Alchemy](http://wiki.dominionstrategy.com/index.php/Alchemy) : `10004XXX`~
-- **October, 2010** : [Prosperity](http://wiki.dominionstrategy.com/index.php/Prosperity) : `10005XXX`
+- ~**October, 2010** : [Prosperity](http://wiki.dominionstrategy.com/index.php/Prosperity) : `10005XXX`~
 - **June, 2011** : [Cornucopia](http://wiki.dominionstrategy.com/index.php/Cornucopia) : `10006XXX`
 - **October, 2011** : [Hinterlands](http://wiki.dominionstrategy.com/index.php/Hinterlands) : `10007XXX`
 - **August, 2012** : [Dark Ages](http://wiki.dominionstrategy.com/index.php/Dark_Ages) : `10008XXX`

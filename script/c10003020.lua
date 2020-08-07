@@ -18,10 +18,10 @@ function scard.op1(e,tp,eg,ep,ev,re,r,rp)
 		local sg=g:FilterSelect(tp,scard.conffilter,1,1,nil)
 		Duel.ConfirmCards(1-tp,sg)
 		Duel.ShuffleHand(tp)
-		local tc=Duel.GetFirstMatchingCard(aux.SupplyFilter(scard.thfilter),tp,LOCATION_SUPPLY,LOCATION_SUPPLY,nil,CARD_GOLD)
+		local tc=Duel.GetFirstMatchingCard(aux.SupplyFilter(scard.thfilter),0,LOCATION_SUPPLY,LOCATION_SUPPLY,nil,CARD_GOLD)
 		Duel.GainCards(tc,REASON_EFFECT,tp,LOCATION_HAND)
 	else
-		local tc=Duel.GetFirstMatchingCard(aux.SupplyFilter(scard.thfilter),tp,LOCATION_SUPPLY,LOCATION_SUPPLY,nil,CARD_SILVER)
+		local tc=Duel.GetFirstMatchingCard(aux.SupplyFilter(scard.thfilter),0,LOCATION_SUPPLY,LOCATION_SUPPLY,nil,CARD_SILVER)
 		Duel.GainCards(tc,REASON_EFFECT,tp,LOCATION_HAND)
 	end
 end

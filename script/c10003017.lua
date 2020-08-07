@@ -10,7 +10,7 @@ function scard.tdfilter(c)
 end
 function scard.op1(e,tp,eg,ep,ev,re,r,rp)
 	Duel.DiscardDeck(1-tp,1,REASON_EFFECT)
-	local tc=Duel.GetFirstMatchingCard(aux.SupplyFilter(scard.tdfilter),1-tp,LOCATION_SUPPLY,LOCATION_SUPPLY,nil)
+	local tc=Duel.GetFirstMatchingCard(aux.SupplyFilter(scard.tdfilter),0,LOCATION_SUPPLY,LOCATION_SUPPLY,nil)
 	Duel.BreakEffect()
 	Duel.GainCards(tc,REASON_EFFECT,1-tp,LOCATION_DECK)
 end

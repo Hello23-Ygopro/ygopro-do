@@ -7,7 +7,7 @@ end
 --gain (add action, add coin, draw)
 function scard.op1(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_GAIN)
-	local g=Duel.SelectMatchingCard(tp,aux.SupplyFilter(Card.IsCostBelow),tp,LOCATION_SUPPLY,LOCATION_SUPPLY,1,1,nil,4)
+	local g=Duel.SelectMatchingCard(tp,aux.SupplyFilter(Card.IsCostBelow),0,LOCATION_SUPPLY,LOCATION_SUPPLY,1,1,nil,4)
 	if g:GetCount()==0 then return end
 	Duel.HintSelection(g)
 	if Duel.GainCards(g,REASON_EFFECT,tp)==0 then return end

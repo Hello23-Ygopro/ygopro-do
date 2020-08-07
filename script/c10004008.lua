@@ -21,7 +21,7 @@ end
 --to deck
 function scard.con1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	return c:IsPreviousLocation(LOCATION_INPLAY) and c:IsAbleToDeck()
+	return c:IsReason(REASON_DISCARD) and c:IsPreviousLocation(LOCATION_INPLAY) and c:IsAbleToDeck()
 		and Duel.IsExistingMatchingCard(aux.InPlayFilter(Card.IsCode),tp,LOCATION_INPLAY,0,1,nil,CARD_POTION)
 end
 function scard.op2(e,tp,eg,ep,ev,re,r,rp)

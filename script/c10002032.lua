@@ -12,7 +12,7 @@ function scard.op1(e,tp,eg,ep,ev,re,r,rp)
 	local tc1=Duel.GetOperatedCard()
 	local cost=tc1:GetCost()
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_GAIN)
-	local g2=Duel.SelectMatchingCard(tp,aux.SupplyFilter(Card.IsCostBelow),tp,LOCATION_SUPPLY,LOCATION_SUPPLY,1,1,nil,cost+2)
+	local g2=Duel.SelectMatchingCard(tp,aux.SupplyFilter(Card.IsCostBelow),0,LOCATION_SUPPLY,LOCATION_SUPPLY,1,1,nil,cost+2)
 	if g2:GetCount()==0 then return end
 	local tc2=g2:GetFirst()
 	Duel.HintSelection(g2)
@@ -22,7 +22,7 @@ function scard.op1(e,tp,eg,ep,ev,re,r,rp)
 		Duel.GainCards(g2,REASON_EFFECT,tp)
 	end
 	if tc2:IsType(TYPE_VICTORY) then
-		local tc3=Duel.GetFirstMatchingCard(aux.SupplyFilter(Card.IsType),1-tp,LOCATION_SUPPLY,LOCATION_SUPPLY,nil,TYPE_CURSE)
+		local tc3=Duel.GetFirstMatchingCard(aux.SupplyFilter(Card.IsType),0,LOCATION_SUPPLY,LOCATION_SUPPLY,nil,TYPE_CURSE)
 		Duel.GainCards(tc3,REASON_EFFECT,1-tp)
 	end
 end

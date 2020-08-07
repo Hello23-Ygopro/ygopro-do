@@ -49,7 +49,7 @@ function scard.op1(e,tp,eg,ep,ev,re,r,rp)
 		Duel.AddCoin(tp,3)
 	end
 	if bit.band(sel,0x8)~=0 then
-		local tc=Duel.GetFirstMatchingCard(aux.SupplyFilter(Card.IsCode),tp,LOCATION_SUPPLY,LOCATION_SUPPLY,nil,CARD_GOLD)
+		local tc=Duel.GetFirstMatchingCard(aux.SupplyFilter(Card.IsCode),0,LOCATION_SUPPLY,LOCATION_SUPPLY,nil,CARD_GOLD)
 		Duel.GainCards(tc,REASON_EFFECT,tp)
 	end
 end

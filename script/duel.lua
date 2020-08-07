@@ -16,7 +16,7 @@ end
 --Note: Overwritten to only let a player sort cards if there are more than 1
 local duel_sort_decktop=Duel.SortDecktop
 function Duel.SortDecktop(sort_player,target_player,count)
-	if Duel.GetFieldGroupCount(target_player,LOCATION_DECK,0)>1 then
+	if count>1 then
 		return duel_sort_decktop(sort_player,target_player,count)
 	else
 		return nil
@@ -224,6 +224,12 @@ end
 function Duel.GetPotions(player)
 	return Duel.GetCounterHolder(player):GetCounter(COUNTER_POTIONS)
 end
+--get the number of tokens a player has
+function Duel.GetTokens(player,tokentype)
+	--player: the player whose tokens to count
+	--tokentype: the name of the token
+	return Duel.GetCounterHolder(player):GetCounter(tokentype)
+end
 --check if a player can play an action card
 function Duel.IsPlayerCanPlayAction(player)
 	if Duel.GetTurnPlayer()~=player or Duel.GetCurrentPhase()~=PHASE_ACTION then return false end
@@ -239,31 +245,30 @@ function Duel.IsPlayerCanTrashDeck(player,count)
 	local g=Duel.GetDecktopGroup(player,count)
 	return g:FilterCount(Card.IsAbleToTrash,nil)>0
 end
---check if a player can set aside the top cards of a deck
---reserved
---[[
-function Duel.IsPlayerCanSetAsideDeck(player,count)
-	local g=Duel.GetDecktopGroup(player,count)
-	return g:FilterCount(Card.IsAbleToSetAside,nil)>0
-end
-]]
 --get the total amount of victory points a player has
 function Duel.GetVP(player)
 	local g=Duel.GetAllCards(player)
-	return g:GetSum(Card.GetVP)
+	return g:GetSum(Card.GetVP)+Duel.GetTokens(player,COUNTER_VP_TOKEN)
 end
 --move a card to the in play area when it is played
 function Duel.SendtoInPlay(targets,reason)
 	if type(targets)=="Card" then targets=Group.FromCards(targets) end
 	local tc=targets:GetFirst()
 	for tc in aux.Next(targets) do
-		--check for "You may play an Action card from your hand twice" ("Throne Room" 1-024)
+		--check for "You may play an Action card from your hand N times" ("Throne Room" 1-024, "King's Court" 5-026)
 		local e1=Effect.CreateEffect(tc)
 		e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
 		e1:SetCode(EVENT_CHAIN_SOLVED)
 		e1:SetOperation(function(e,tp,eg,ep,ev,re,r,rp)
+			local count=0
 			local c=e:GetHandler()
 			if c:IsHasEffect(EFFECT_PLAY_ACTION_TWICE) then
+				count=count+(c:GetEffectCount(EFFECT_PLAY_ACTION_TWICE)*1)
+			end
+			if c:IsHasEffect(EFFECT_PLAY_ACTION_THRICE) then
+				count=count+(c:GetEffectCount(EFFECT_PLAY_ACTION_THRICE)*2)
+			end
+			for i=1,count do
 				Duel.PlayAction(c)
 			end
 		end)
@@ -278,6 +283,10 @@ function Duel.GainCards(targets,reason,player,dest_loc)
 	if type(targets)=="Card" then targets=Group.FromCards(targets) end
 	local res=0
 	if not targets then return res end
+	--check if a card can be bought
+	if bit.band(reason,REASON_BUY)~=0 then
+		targets=targets:Filter(Card.IsCanBeBought,nil)
+	end
 	for tc in aux.Next(targets) do
 		if tc:GetCounter(COUNTER_COPIES)>1 then
 			local card=Duel.CreateCard(player,tc:GetCode())
@@ -306,7 +315,7 @@ function Duel.GainCards(targets,reason,player,dest_loc)
 		--remove kingdom card status
 		tc:SetStatus(STATUS_KINGDOM,false)
 		--raise event for gaining cards
-		Duel.RaiseEvent(tc,EVENT_CUSTOM+EVENT_GAIN,Effect.GlobalEffect(),0,0,0,0)
+		Duel.RaiseEvent(tc,EVENT_CUSTOM+EVENT_GAIN,Effect.GlobalEffect(),0,player,player,0)
 		res=res+1
 	end
 	return res
@@ -364,9 +373,23 @@ function Duel.PlayAction(targets)
 	end
 	return res
 end
+--play a treasure card
+function Duel.PlayTreasure(targets)
+	if type(targets)=="Card" then targets=Group.FromCards(targets) end
+	local res=0
+	for tc in aux.Next(targets) do
+		Duel.DisableShuffleCheck(true)
+		Duel.SendtoHand(tc,tc:GetControler(),REASON_RULE)
+		Duel.ConfirmCards(1-tc:GetControler(),tc)
+		Duel.RaiseSingleEvent(tc,EVENT_CUSTOM+EVENT_PLAY_TREASURE,tc:GetReasonEffect(),0,0,0,0)
+		Duel.DisableShuffleCheck(false)
+		res=res+1
+	end
+	return res
+end
 --check if there is a province pile
 function Duel.CheckProvincePile()
-	return Duel.GetFirstMatchingCard(aux.SupplyFilter(Card.IsCode),0,LOCATION_SUPPLY,LOCATION_SUPPLY,nil,CARD_PROVINCE)
+	return Duel.GetFirstMatchingCard(aux.SupplyFilter(Card.IsCode),0,LOCATION_SUPPLY,LOCATION_SUPPLY,nil,CARD_PROVINCE,CARD_COLONY)
 end
 --get the number of empty supply piles
 function Duel.GetEmptySupplyPiles()
@@ -378,11 +401,14 @@ function Duel.GetEmptySupplyPiles()
 	return MAX_SUPPLY_PILES-ct
 end
 --add a token to a supply pile
-function Duel.AddToken(targets,tokentype,count)
+function Duel.AddSupplyToken(targets,tokentype,count)
+	--targets: the supply pile to add the token to
+	--tokentype: the name of the token
+	--count: the amount of tokens to add
 	if type(targets)=="Card" then targets=Group.FromCards(targets) end
-	local res=0
+	local res=false
 	for tc in aux.Next(targets) do
-		tc:AddCounter(tokentype,count)
+		res=tc:AddCounter(tokentype,count)
 		--register the effect of "Embargo" (3-001)
 		if tokentype==COUNTER_EMBARGO_TOKEN then
 			local e1=Effect.GlobalEffect()
@@ -401,36 +427,39 @@ function Duel.AddToken(targets,tokentype,count)
 				end
 			end)
 			Duel.RegisterEffect(e1,0)
+		--register the effect of "Trade Route" (5-004)
+		elseif tokentype==COUNTER_COIN_TOKEN then
+			local e1=Effect.GlobalEffect()
+			e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+			e1:SetCode(EVENT_ADJUST)
+			e1:SetCountLimit(count)
+			e1:SetLabelObject(tc)
+			e1:SetOperation(function(e,tp,eg,ep,ev,re,r,rp)
+				local c=e:GetLabelObject()
+				local g=Duel.GetMatchingGroup(Card.IsCode,0,LOCATION_ALL,LOCATION_ALL,nil,c:GetCode())
+				for tc in aux.Next(g) do
+					local e1=Effect.CreateEffect(c)
+					e1:SetType(EFFECT_TYPE_SINGLE)
+					e1:SetCode(EFFECT_TRADE_ROUTE)
+					tc:RegisterEffect(e1)
+				end
+			end)
+			Duel.RegisterEffect(e1,0)
 		end
-		res=res+1
 	end
 	return res
+end
+--add a token to a player
+function Duel.AddPlayerToken(player,tokentype,count)
+	--player: the player to add the token to
+	--tokentype: the name of the token
+	--count: the amount of tokens to add
+	return Duel.GetCounterHolder(player):AddCounter(tokentype,count)
 end
 --set aside a card
 function Duel.SetAside(targets,pos,reason,player)
 	return Duel.Remove(targets,pos,reason,player)
 end
---set aside the top cards of a player's deck
---reserved
---[[
-function Duel.SetAsideDeck(player,count,pos,reason)
-	local res=0
-	local deck_count=Duel.GetFieldGroupCount(player,LOCATION_DECK,0)
-	local g1=Duel.GetMatchingGroup(Card.IsAbleToDeck,player,LOCATION_DPILE,0,nil)
-	if count>deck_count and g1:GetCount()>0 then
-		Duel.SendtoDeck(g1,player,SEQ_DECK_SHUFFLE,REASON_RULE)
-		Duel.ShuffleDeck(player)
-	end
-	if deck_count>0 and count>deck_count and g1:GetCount()==0 then count=deck_count end
-	--fix some cards set aside to the wrong player's side
-	if Duel.IsPlayerCanSetAsideDeck(player,count) then
-		local g2=Duel.GetDecktopGroup(player,count)
-		Duel.DisableShuffleCheck()
-		res=res+Duel.Remove(g2,pos,reason,player)
-	end
-	return res
-end
-]]
 --get the bottom cards of a player's deck
 function Duel.GetDeckbottomGroup(player,count)
 	local f=function(c,count)

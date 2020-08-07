@@ -1,10 +1,10 @@
 --Lookout
 local scard,sid=aux.GetID()
 function scard.initial_effect(c)
-	--add action, confirm (trash deck, discard deck)
+	--add action, confirm (trash, discard deck)
 	aux.AddActionEffect(c,scard.op1)
 end
---add action, confirm (trash deck, discard deck)
+--add action, confirm (trash, discard deck)
 function scard.op1(e,tp,eg,ep,ev,re,r,rp)
 	Duel.AddAction(tp,1)
 	local g=Duel.GetDecktopGroup(tp,3)
@@ -20,6 +20,5 @@ function scard.op1(e,tp,eg,ep,ev,re,r,rp)
 	local sg2=g:FilterSelect(tp,Card.IsAbleToDPile,1,1,nil)
 	if sg2:GetCount()>0 then
 		Duel.SendtoDPile(sg2,REASON_EFFECT+REASON_DISCARD,tp)
-		g:Sub(sg2)
 	end
 end
