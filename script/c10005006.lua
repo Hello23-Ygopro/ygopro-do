@@ -30,4 +30,12 @@ end
 	total.
 	* If you have no cards left in hand to trash, you still get the $1 and 1VP.
 	http://wiki.dominionstrategy.com/index.php/Bishop#FAQ
+
+	Official Rules
+
+	Prosperity
+	* When a player first takes VP tokens, he takes a player mat to put them on.
+	* VP tokens are not private; anyone can count them.
+	* At the end of the game, players add the VP they have from tokens to their regular score.
+	http://wiki.dominionstrategy.com/index.php/VP_token
 ]]

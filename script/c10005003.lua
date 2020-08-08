@@ -69,11 +69,8 @@ end
 	FAQ
 
 	Official FAQ
-	* This is similar to Throne Room, but plays the Action three times rather than twice.
-	* For example if you start a turn by playing King's Court on Village, you would draw a card, get +2 Actions, draw
-	another card, get +2 Actions again, draw a 3rd card, and get +2 Actions again, leaving you with 6 Actions.
-	* If you King's Court a King's Court, you may play an Action card three times, then may play another Action card three
-	times, then may play a 3rd Action card three times; you do not play one Action card nine times.
+	* If you run out of cards before revealing a Treasure, shuffle your discard pile (but not the revealed cards) to get
+	more; if you still do not find a Treasure, just discard all of the revealed cards.
 	http://wiki.dominionstrategy.com/index.php/Loan#FAQ
 
 	References

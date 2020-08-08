@@ -24,7 +24,7 @@ function scard.op1(e,tp,eg,ep,ev,re,r,rp)
 		Duel.ShuffleHand(tp)
 		local code=sg:GetFirst():GetCode()
 		local tc=Duel.GetFirstMatchingCard(aux.SupplyFilter(Card.IsCode),0,LOCATION_SUPPLY,LOCATION_SUPPLY,nil,code)
-		Duel.GainCards(tc,REASON_EFFECT,tp,LOCATION_HAND)
+		Duel.GainCards(tc,REASON_EFFECT,tp)
 	end
 end
 --trash

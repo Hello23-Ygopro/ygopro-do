@@ -93,10 +93,6 @@ end
 function Card.IsPotionCostAbove(c,cost)
 	return c:GetPotionCost()>=cost
 end
---check if a card has victory points
-function Card.IsHasVP(c)
-	return c.vp
-end
 --check if a card has P in its cost
 function Card.IsHasPotionCost(c)
 	return c.potion_cost

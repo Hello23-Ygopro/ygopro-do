@@ -15,12 +15,4 @@ end
 	Official FAQ
 	* You get +$2 and take a VP token.
 	http://wiki.dominionstrategy.com/index.php/Monument#FAQ
-
-	Official Rules
-
-	Prosperity
-	* When a player first takes VP tokens, he takes a player mat to put them on.
-	* VP tokens are not private; anyone can count them.
-	* At the end of the game, players add the VP they have from tokens to their regular score.
-	http://wiki.dominionstrategy.com/index.php/VP_token
 ]]

@@ -4,7 +4,7 @@ function scard.initial_effect(c)
 	aux.AddCoin(c,2)
 	--treasure
 	aux.EnableTreasureAttribute(c)
-	--gain
+	--to deck
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(sid,1))
 	e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
@@ -14,7 +14,7 @@ function scard.initial_effect(c)
 	e1:SetOperation(scard.op1)
 	c:RegisterEffect(e1)
 end
---gain
+--to deck
 function scard.op1(e,tp,eg,ep,ev,re,r,rp)
 	for ec in aux.Next(eg) do
 		if ec:IsAbleToDeck() and Duel.SelectEffectYesNo(tp,e:GetHandler(),YESNOMSG_USEEFFECT) then

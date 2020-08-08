@@ -120,7 +120,7 @@ function Auxiliary.AddCoin(c,val)
 	local mt=getmetatable(c)
 	mt.coin=val
 end
---register the vp a card is worth
+--register the victory points a card is worth
 function Auxiliary.AddVP(c,val)
 	local mt=getmetatable(c)
 	mt.vp=val
@@ -188,7 +188,7 @@ function Auxiliary.TreasureOperation(e,tp,eg,ep,ev,re,r,rp)
 		Duel.RemovePotion(tp,tc:GetPotionCost())
 		coin=Duel.GetCoins(tp)
 		potion=Duel.GetPotions(tp)
-		g=g:Filter(Auxiliary.SupplyFilter(Auxiliary.TreasureFilter),nil,coin,potion)
+		g=g:Filter(f,nil,coin,potion)
 		--raise event for buying cards
 		Duel.RaiseEvent(tc,EVENT_CUSTOM+EVENT_BUY,e,0,tp,tp,0)
 		Duel.RaiseSingleEvent(tc,EVENT_CUSTOM+EVENT_BUY,e,0,tp,tp,0)
