@@ -2,7 +2,7 @@ Rule={}
 --register rules
 function Rule.RegisterRules(c)
 	local e1=Effect.CreateEffect(c)
-	e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE+EFFECT_FLAG_IGNORE_IMMUNE+EFFECT_FLAG_NO_TURN_RESET)
+	e1:SetProperty(EFFECT_FLAG_IGNORE_IMMUNE+EFFECT_FLAG_NO_TURN_RESET)
 	e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
 	e1:SetCode(EVENT_ADJUST)
 	e1:SetRange(LOCATION_ALL)
@@ -75,22 +75,18 @@ function Rule.ApplyRules(e,tp,eg,ep,ev,re,r,rp)
 	e7:SetCountLimit(1)
 	e7:SetOperation(Rule.CleanupOperation)
 	Duel.RegisterEffect(e7,0)
-	--show score
-	local e8=Effect.GlobalEffect()
-	e8:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
-	e8:SetCode(EVENT_ADJUST)
-	e8:SetOperation(Rule.ShowScoreOperation)
-	Duel.RegisterEffect(e8,0)
 	--end game
-	local e9=Effect.GlobalEffect()
-	e9:SetProperty(EFFECT_FLAG_IGNORE_IMMUNE)
-	e9:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
-	e9:SetCode(EVENT_TURN_END)
-	e9:SetCountLimit(1)
-	e9:SetCondition(Rule.EndGameCondition)
-	e9:SetOperation(Rule.EndGameOperation)
-	Duel.RegisterEffect(e9,0)
+	local e8=Effect.GlobalEffect()
+	e8:SetProperty(EFFECT_FLAG_IGNORE_IMMUNE)
+	e8:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+	e8:SetCode(EVENT_TURN_END)
+	e8:SetCountLimit(1)
+	e8:SetCondition(Rule.EndGameCondition)
+	e8:SetOperation(Rule.EndGameOperation)
+	Duel.RegisterEffect(e8,0)
 	--override yugioh rules
+	--set lp
+	Rule.set_lp()
 	--set level status
 	Rule.set_level_status()
 	--cannot draw
@@ -406,13 +402,6 @@ function Rule.CleanupOperation(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Draw(turnp,Duel.GetDrawCount(turnp),REASON_RULE)
 	Duel.EndTurn()
 end
---show score
-function Rule.ShowScoreOperation(e,tp,eg,ep,ev,re,r,rp)
-	local ct1=Duel.GetVP(PLAYER_ONE)
-	local ct2=Duel.GetVP(PLAYER_TWO)
-	if Duel.GetScore(PLAYER_ONE)~=ct1 and ct1>=0 then Duel.SetScore(PLAYER_ONE,ct1) end
-	if Duel.GetScore(PLAYER_TWO)~=ct2 and ct2>=0 then Duel.SetScore(PLAYER_TWO,ct2) end
-end
 --end game
 function Rule.EndGameCondition(e)
 	return not Duel.CheckProvincePile() or Duel.GetEmptySupplyPiles()>=3
@@ -444,6 +433,20 @@ function Rule.EndGameOperation(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 --override yugioh rules
+--set lp
+function Rule.set_lp(tp)
+	local e1=Effect.GlobalEffect()
+	e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+	e1:SetCode(EVENT_ADJUST)
+	e1:SetOperation(Rule.SetLPOperation)
+	Duel.RegisterEffect(e1,0)
+end
+function Rule.SetLPOperation(e,tp,eg,ep,ev,re,r,rp)
+	local ct1=Duel.GetVP(PLAYER_ONE)
+	local ct2=Duel.GetVP(PLAYER_TWO)
+	if Duel.GetScore(PLAYER_ONE)~=ct1 and ct1>=0 then Duel.SetScore(PLAYER_ONE,ct1) end
+	if Duel.GetScore(PLAYER_TWO)~=ct2 and ct2>=0 then Duel.SetScore(PLAYER_TWO,ct2) end
+end
 --set level status
 function Rule.set_level_status()
 	local e1=Effect.GlobalEffect()
