@@ -1,6 +1,6 @@
 --Overwritten Card functions
 --get a card's current cost
---Note: Overwritten to check for the correct cost value if it is changed while the card is not in LOCATION_MZONE
+--Note: Overwritten to check for the correct value if it is changed while the card is not in LOCATION_MZONE
 local card_get_level=Card.GetLevel
 function Card.GetLevel(c)
 	local res=c:GetOriginalCost()

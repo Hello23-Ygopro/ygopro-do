@@ -171,8 +171,8 @@ LOCATION_REASON_COUNT		=0x4	--(unused, only available in YGOPro Percy)
 --Win Reason
 WIN_REASON_VP				=0x1	--Had the most VP.
 --Summon Type
-SUMMON_TYPE_NORMAL		=0x10000000 --(unused)
-SUMMON_TYPE_ADVANCE		=0x11000000 --(unused)
+SUMMON_TYPE_NORMAL		=0x10000000	--(unused)
+SUMMON_TYPE_ADVANCE		=0x11000000	--(unused)
 SUMMON_TYPE_DUAL		=0x12000000	--(unused)
 SUMMON_TYPE_FLIP		=0x20000000	--(unused)
 SUMMON_TYPE_SPECIAL		=0x40000000	--(unused)
@@ -180,7 +180,7 @@ SUMMON_TYPE_FUSION		=0x43000000	--(unused)
 SUMMON_TYPE_RITUAL		=0x45000000	--(unused)
 SUMMON_TYPE_SYNCHRO		=0x46000000	--(unused)
 SUMMON_TYPE_XYZ			=0x49000000	--(unused)
-SUMMON_TYPE_PENDULUM	=0x4a000000 --(unused)
+SUMMON_TYPE_PENDULUM	=0x4a000000	--(unused)
 SUMMON_TYPE_LINK		=0x4c000000	--(unused)
 --Summon Value
 SUMMON_VALUE_SELF					=0x1	--(unused)
@@ -256,7 +256,7 @@ COUNTER_EMBARGO_TOKEN		=0x1005	--This represents Embargo token
 COUNTER_COIN_TOKEN			=0x1006	--This represents Coin token
 COUNTER_POTIONS				=0x1007	--This represents the amount of Potions a player has
 COUNTER_COIN_TOKEN_TR		=0x1008	--This represents Coin token on the Trade Route mat
-COUNTER_VP_TOKEN			=0x1009 --This represents VP token
+COUNTER_VP_TOKEN			=0x1009	--This represents VP token
 --Phase
 PHASE_ACTION		=0x01	--Action phase
 PHASE_BUY			=0x02	--Buy phase
@@ -372,13 +372,13 @@ EFFECT_FLAG_EVENT_PLAYER		=0x800000	--(unused)
 EFFECT_FLAG_OWNER_RELATE		=0x1000000	--(unused)
 EFFECT_FLAG_PLAY_PARAM			=0x2000000	--Put in play when played
 EFFECT_FLAG_CLIENT_HINT			=0x4000000	--Enables a tooltip of the effect (can only be used outside initial_effect)
-EFFECT_FLAG_CHAIN_UNIQUE		=0x8000000	--(deprecated, only available in YGOPro Percy)
+EFFECT_FLAG_CHAIN_UNIQUE		=0x8000000	--(N/A)
 EFFECT_FLAG_LIMIT_ZONE			=0x10000000	--(unused, not available in YGOPro Percy)
-EFFECT_FLAG_COF					=0x20000000 --(deprecated)
-EFFECT_FLAG_CVAL_CHECK			=0x40000000	--(deprecated, only available in YGOPro Percy)
+EFFECT_FLAG_COF					=0x20000000	--(N/A)
+EFFECT_FLAG_CVAL_CHECK			=0x40000000	--(N/A)
 EFFECT_FLAG_IMMEDIATELY_APPLY	=0x80000000	--(unused)
 
-EFFECT_FLAG2_NAGA				=0x0001		--(deprecated)
+EFFECT_FLAG2_NAGA				=0x0001		--(N/A)
 EFFECT_FLAG2_COF				=0x0002		--(unused)
 EFFECT_FLAG2_MAJESTIC_MUST_COPY	=0x80000000	--(unused, only available in YGOPro Percy)
 --Effect Code
