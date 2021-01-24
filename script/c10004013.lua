@@ -1,5 +1,5 @@
 --Possession
---Not fully implemented: Cannot make decisions for the opponent 
+--Not fully implemented: Cannot make decisions for the opponent
 local scard,sid=aux.GetID()
 function scard.initial_effect(c)
 	aux.AddPotionCost(c,1)

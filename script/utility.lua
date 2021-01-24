@@ -304,7 +304,7 @@ end
 --e.g. "Philosopher's Stone" (4-010)
 function Auxiliary.SelfInPlayCondition(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	return c:IsLocation(LOCATION_INPLAY) and not c:IsReason(REASON_TRASH) 
+	return c:IsLocation(LOCATION_INPLAY) and not c:IsReason(REASON_TRASH)
 end
 --filter for a card in the supply
 function Auxiliary.SupplyFilter(f)
