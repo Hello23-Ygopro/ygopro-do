@@ -21,6 +21,8 @@ CARD_SMUGGLERS		=10003009	--EVENT_CUSTOM+EVENT_GAIN
 CARD_LOAN			=10005003	--EVENT_CUSTOM+EVENT_PLAY
 CARD_TRADE_ROUTE	=10005004	--EVENT_CUSTOM+EVENT_SETUP
 CARD_VENTURE		=10005019	--EVENT_CUSTOM+EVENT_PLAY_TREASURE
+--Flag Effect Code (for Card.RegisterFlagEffect, Duel.RegisterFlagEffect)
+FLAG_CODE_RULES	=10000000	--Prevents registering rules twice
 --Location
 LOCATION_ALL		=0xff	--All locations
 LOCATION_DECK		=0x01	--Deck
@@ -522,8 +524,8 @@ EFFECT_LPCOST_REPLACE				=171	--(unused)
 EFFECT_SKIP_DP						=180	--Skip Draw Phase
 EFFECT_SKIP_SP						=181	--Skip Standby Phase
 EFFECT_SKIP_M1						=182	--(unused) Skip Main Phase 1
-EFFECT_SKIP_BP						=183	--(unused) Skip Battle Phase
-EFFECT_SKIP_M2						=184	--(unused) Skip Main Phase 2
+EFFECT_SKIP_BP						=183	--Skip Battle Phase
+EFFECT_SKIP_M2						=184	--Skip Main Phase 2
 EFFECT_CANNOT_BP					=185	--Cannot conduct Battle Phase
 EFFECT_CANNOT_M2					=186	--Cannot conduct Main Phase 2
 EFFECT_CANNOT_EP					=187	--Cannot conduct End Phase

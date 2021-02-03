@@ -11,8 +11,8 @@ function Rule.RegisterRules(c)
 	c:RegisterEffect(e1)
 end
 function Rule.ApplyRules(e,tp,eg,ep,ev,re,r,rp)
-	if Duel.GetFlagEffect(PLAYER_ONE,10000000)>0 then return end
-	Duel.RegisterFlagEffect(PLAYER_ONE,10000000,0,0,0)
+	if Duel.GetFlagEffect(PLAYER_ONE,FLAG_CODE_RULES)>0 then return end
+	Duel.RegisterFlagEffect(PLAYER_ONE,FLAG_CODE_RULES,0,0,0)
 	--remove rules
 	Rule.remove_rules()
 	--create starting deck
@@ -523,15 +523,21 @@ function Rule.cannot_phases()
 	local e1=Effect.GlobalEffect()
 	e1:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
 	e1:SetType(EFFECT_TYPE_FIELD)
-	e1:SetCode(EFFECT_CANNOT_BP)
+	e1:SetCode(EFFECT_SKIP_BP)
 	e1:SetTargetRange(1,1)
 	Duel.RegisterEffect(e1,0)
 	local e2=e1:Clone()
-	e2:SetCode(EFFECT_CANNOT_M2)
+	e2:SetCode(EFFECT_SKIP_M2)
 	Duel.RegisterEffect(e2,0)
 	local e3=e1:Clone()
-	e3:SetCode(EFFECT_CANNOT_EP)
+	e3:SetCode(EFFECT_CANNOT_BP)
 	Duel.RegisterEffect(e3,0)
+	local e4=e1:Clone()
+	e4:SetCode(EFFECT_CANNOT_M2)
+	Duel.RegisterEffect(e4,0)
+	local e5=e1:Clone()
+	e5:SetCode(EFFECT_CANNOT_EP)
+	Duel.RegisterEffect(e5,0)
 end
 --cannot change position
 function Rule.cannot_change_position()
