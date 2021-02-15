@@ -1,3 +1,14 @@
+--Temporary Card functions
+--check if a card has a given setname
+--Note: Overwritten to check for an infinite number of setnames
+local card_is_set_card=Card.IsSetCard
+function Card.IsSetCard(c,...)
+	local setname_list={...}
+	for _,setname in ipairs(setname_list) do
+		if card_is_set_card(c,setname,...) then return true end
+	end
+	return false
+end
 --Overwritten Card functions
 --get a card's current cost
 --Note: Overwritten to check for the correct value if it is changed while the card is not in LOCATION_MZONE
@@ -58,6 +69,18 @@ function Card.GetCoin(c)
 	end
 	return res
 end
+--check if the amount of coins a card is worth is equal to a given value
+function Card.IsCoin(c,coin)
+	return c:GetCoin()==coin
+end
+--check if the amount of coins a card is worth is less than or equal to a given value
+function Card.IsCoinBelow(c,coin)
+	return c:GetCoin()<=coin
+end
+--check if the amount of coins a card is worth is greater than or equal to a given value
+function Card.IsCoinAbove(c,coin)
+	return c:GetCoin()>=coin
+end
 --get the amount of victory points a card is worth
 function Card.GetVP(c)
 	local res=c.vp or 0
@@ -71,10 +94,34 @@ function Card.GetVP(c)
 	end
 	return res
 end
+--check if the amount of victory points a card is worth is equal to a given value
+function Card.IsVP(c,vp)
+	return c:GetVP()==vp
+end
+--check if the amount of victory points a card is worth is less than or equal to a given value
+function Card.IsVPBelow(c,vp)
+	return c:GetVP()<=vp
+end
+--check if the amount of victory points a card is worth is greater than or equal to a given value
+function Card.IsVPAbove(c,vp)
+	return c:GetVP()>=vp
+end
 --get the amount of potions a card is worth
 function Card.GetPotion(c)
 	local res=c.potion or 0
 	return res
+end
+--check if the amount of potions a card is worth is equal to a given value
+function Card.IsPotion(c,potion)
+	return c:GetPotion()==potion
+end
+--check if the amount of potions a card is worth is less than or equal to a given value
+function Card.IsPotionBelow(c,potion)
+	return c:GetPotion()<=potion
+end
+--check if the amount of potions a card is worth is greater than or equal to a given value
+function Card.IsPotionAbove(c,potion)
+	return c:GetPotion()>=potion
 end
 --get a card's current potion cost
 function Card.GetPotionCost(c)
